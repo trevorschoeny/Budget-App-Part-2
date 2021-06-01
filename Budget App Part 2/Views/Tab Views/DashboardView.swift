@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SummaryView: View {
+struct DashboardView: View {
     var body: some View {
         Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
     }
@@ -15,6 +15,6 @@ struct SummaryView: View {
 
 struct SummaryView_Previews: PreviewProvider {
     static var previews: some View {
-        SummaryView()
+        DashboardView()
     }
 }

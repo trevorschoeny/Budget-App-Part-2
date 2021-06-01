@@ -1,16 +1,16 @@
 //
-//  TransactionModel.swift
+//  AccountModel.swift
 //  Budget App Part 2
 //
-//  Created by Trevor Schoeny on 5/28/21.
+//  Created by Trevor Schoeny on 5/30/21.
 //
 
 import Foundation
 import CoreData
 
-class TransactionModel: ObservableObject {
+class AccountModel: ObservableObject {
    let container: NSPersistentContainer
-   @Published var savedEntities: [TransactionEntity] = []
+   @Published var savedEntities: [AccountEntity] = []
    
    init() {
       container = NSPersistentContainer(name: "BudgetAppContainer")
@@ -19,13 +19,13 @@ class TransactionModel: ObservableObject {
             print("ERROR LOADING CORE DATA. \(error)")
          }
       }
-      fetchTransactions()
+      fetchAccounts()
    }
    
-   // MARK: fetchTransactions
-   func fetchTransactions() {
+   // MARK: fetchAccounts
+   func fetchAccounts() {
       // Create a fetch request
-      let request = NSFetchRequest<TransactionEntity>(entityName: "TransactionEntity")
+      let request = NSFetchRequest<AccountEntity>(entityName: "AccountEntity")
       do {
          // Try to fetch the fetch request and store the results in savedEntities
          savedEntities = try container.viewContext.fetch(request)
@@ -34,22 +34,25 @@ class TransactionModel: ObservableObject {
       }
    }
    
-   // MARK: addTransaction
-   func addTransaction(name: String, date: Date, debit: Bool, account: String, amount: Double, budget: String, notes: String) {
-      let newTransaction = TransactionEntity(context: container.viewContext)
-      newTransaction.name = name
-      newTransaction.date = date
-      newTransaction.debit = debit
-      newTransaction.account = account
-      newTransaction.amount = amount
-      newTransaction.budget = budget
-      newTransaction.notes = notes
-      
+   // MARK: addAccount
+   func addAccount(name: String, debit: Bool) {
+      let newAccount = AccountEntity(context: container.viewContext)
+      newAccount.name = name
+      newAccount.debit = debit
+      newAccount.balance = 0.0
       saveData()
    }
    
-   // MARK: deleteTransaction
-   func deleteTransaction(indexSet: IndexSet) {
+   // MARK: changeAccountOrder
+   func changeAccountOrder(indexSet: IndexSet) {
+      guard let index = indexSet.first else { return }
+      let entity = savedEntities[index]
+      //entity.index = Int64(index)
+      saveData()
+   }
+   
+   // MARK: deleteAccount
+   func deleteAccount(indexSet: IndexSet) {
       guard let index = indexSet.first else { return }
       let entity = savedEntities[index]
       container.viewContext.delete(entity)
@@ -61,7 +64,7 @@ class TransactionModel: ObservableObject {
       do {
          try container.viewContext.save()
          // fetchTransactions() will update the UI with the new saved data
-         fetchTransactions()
+         fetchAccounts()
       } catch let error {
          print("Error saving: \(error)")
       }

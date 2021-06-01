@@ -12,6 +12,7 @@ struct Budget_App_Part_2App: App {
     var body: some Scene {
         WindowGroup {
             BudgetTabView()
+               .onAppear(perform: UIApplication.shared.addTapGestureRecognizer)
         }
     }
 }

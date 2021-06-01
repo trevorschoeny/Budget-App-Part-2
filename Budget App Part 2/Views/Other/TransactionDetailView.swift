@@ -8,30 +8,30 @@
 import SwiftUI
 
 struct TransactionDetailView: View {
-   var transaction:Transaction
+   var transaction:TransactionEntity
    
     var body: some View {
       GeometryReader { geo in
          ScrollView {
             VStack(alignment: .leading) {
-               
+
                // MARK: Description
-               Text(transaction.description)
+               Text(transaction.name ?? "No Name")
                   .font(.title3)
                   .fontWeight(.medium)
                   .foregroundColor(Color.black)
                   .padding(.top)
-                  
-               
+
+
                // MARK: Date
-               Text(transaction.date)
+               Text(transaction.date?.addingTimeInterval(0) ?? Date(), style: .date)
                   .font(.title2)
                   .foregroundColor(Color.gray)
                   .padding(.bottom)
-                  
+
                VStack {
                   VStack {
-                     
+
                      // MARK: Amount
                      if transaction.debit {
                         Text("$" + String(transaction.amount))
@@ -45,19 +45,23 @@ struct TransactionDetailView: View {
                            .fontWeight(.semibold)
                            .foregroundColor(Color.red)
                      }
-                     
+
                      // MARK: Account
                      if transaction.debit {
-                        Text("to " + transaction.account)
+                        Text("to " + (transaction.account ?? "No Account"))
                            .font(.title2)
                            .fontWeight(.light)
                            .foregroundColor(Color.green)
                      }
                      else {
-                        Text("from " + transaction.account)
+                        Text("from " + (transaction.account ?? "No Account"))
                            .font(.title2)
                            .fontWeight(.light)
                            .foregroundColor(Color.red)
+                        Text("Budget: " + (transaction.budget ?? "No Budget"))
+                           .font(.title2)
+                           .fontWeight(.light)
+                           .foregroundColor(Color.gray)
                      }
                   }
                   .padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
@@ -68,16 +72,21 @@ struct TransactionDetailView: View {
                }
                .padding(.bottom)
                .frame(width: geo.size.width-40, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-               
+
                // MARK: Notes
                Text("Notes:")
                   .font(.title2)
                   .foregroundColor(Color.gray)
                   .padding(.bottom, 5.0)
-                  
-               Text(transaction.notes)
+
+               Text(transaction.notes ?? "No Notes")
                   .foregroundColor(Color.gray)
                
+               if transaction.notes == "" {
+                  Text("No Notes")
+                     .foregroundColor(Color.gray)
+               }
+
                Spacer()
             }
             .navigationBarTitle("", displayMode: .inline)
@@ -93,6 +102,6 @@ struct TransactionDetailView_Previews: PreviewProvider {
     static var previews: some View {
       let model = TransactionModel()
       
-      TransactionDetailView(transaction: model.transactions[2])
+      TransactionDetailView(transaction: model.savedEntities[0])
     }
 }
