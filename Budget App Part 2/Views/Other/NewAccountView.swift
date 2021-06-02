@@ -14,7 +14,7 @@ struct NewAccountView: View {
    @Environment(\.presentationMode) var presentationMode
    @State var selectedName = ""
    @State var showAlert = false
-   @State var debitToggle = false
+   @State var debitToggle = true
    
    var body: some View {
       NavigationView {
@@ -47,7 +47,7 @@ struct NewAccountView: View {
                else {
                   accountModel.addAccount(name: selectedName, debit: debitToggle)
                   selectedName = ""
-                  debitToggle = false
+                  debitToggle = true
                   self.presentationMode.wrappedValue.dismiss() // << behaves the same as below
                }
                
@@ -64,6 +64,7 @@ struct NewAccountView: View {
                      .foregroundColor(.white)
                }
             })
+            .padding(.bottom)
             .alert(isPresented: $showAlert, content: {
                Alert(title: Text("Invalid Entry"), message: Text("Please enter a valid input."), dismissButton: .default(Text("Ok")))
             })

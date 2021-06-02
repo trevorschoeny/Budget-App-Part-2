@@ -24,9 +24,9 @@ class AccountModel: ObservableObject {
    
    // MARK: fetchAccounts
    func fetchAccounts() {
-//      @FetchRequest(entity: FruitEntity.entity(), sortDescriptors: [NSSortDescriptor(keyPath: \FruitEntity.name, ascending: true)]) var fruits: FetchedResults<FruitEntity>
       // Create a fetch request
       let request = NSFetchRequest<AccountEntity>(entityName: "AccountEntity")
+      request.sortDescriptors = [NSSortDescriptor(key: "userOrder", ascending: true), NSSortDescriptor(key: "name", ascending: true)]
       do {
          // Try to fetch the fetch request and store the results in savedEntities
          savedEntities = try container.viewContext.fetch(request)
@@ -46,12 +46,12 @@ class AccountModel: ObservableObject {
    }
    
    // MARK: changeAccountOrder
-   func changeAccountOrder(indexSet: IndexSet) {
-      guard let index = indexSet.first else { return }
-      let entity = savedEntities[index]
-      //entity.index = Int64(index)
-      saveData()
-   }
+//   func changeAccountOrder(indexSet: IndexSet) {
+//      guard let index = indexSet.first else { return }
+//      let entity = savedEntities[index]
+//      entity.userOrder = Int16(index)
+//      saveData()
+//   }
    
    // MARK: deleteAccount
    func deleteAccount(indexSet: IndexSet) {
@@ -65,7 +65,7 @@ class AccountModel: ObservableObject {
    func saveData() {
       do {
          try container.viewContext.save()
-         // fetchTransactions() will update the UI with the new saved data
+         // fetchAccounts() will update the UI with the new saved data
          fetchAccounts()
       } catch let error {
          print("Error saving: \(error)")

@@ -22,17 +22,20 @@ struct AccountView: View {
                         .foregroundColor(.green)
                      Text("•")
                         .foregroundColor(.green)
+                  } else {
+                     Text(a.name ?? "No Name")
+                        .foregroundColor(.red)
+                     Text("•")
+                        .foregroundColor(.red)
+                  }
+                  if a.balance >= 0 {
                      Text("$" + String(a.balance) )
                         .foregroundColor(.green)
 //                     Text("• \(a.userOrder)")
 //                        .foregroundColor(.green)
                   }
                   else {
-                     Text(a.name ?? "No Name")
-                        .foregroundColor(.red)
-                     Text("•")
-                        .foregroundColor(.red)
-                     Text("$" + String(a.balance) )
+                     Text("($" + String(abs(a.balance)) + ")")
                         .foregroundColor(.red)
 //                     Text("• \(a.userOrder)")
 //                        .foregroundColor(.red)
@@ -42,7 +45,13 @@ struct AccountView: View {
             .onDelete(perform: { indexSet in
                accountModel.deleteAccount(indexSet: indexSet)
             })
-            .onMove(perform: move)
+            .onMove { (indexSet, index) in
+               self.accountModel.savedEntities.move(fromOffsets: indexSet, toOffset: index)
+               for i in 0..<accountModel.savedEntities.count {
+                  accountModel.savedEntities[i].userOrder = Int16(i)
+               }
+               accountModel.saveData()
+            }
          }
          .navigationTitle("Accounts")
          .navigationBarItems(leading: EditButton(), trailing: addButton)
@@ -52,10 +61,10 @@ struct AccountView: View {
          NewAccountView()
       })
    }
-   private func move(from source: IndexSet, to destination: Int) {
-      accountModel.savedEntities.move(fromOffsets: source, toOffset: destination)
-      //accountModel.savedEntities[IndexSet.first ?? 0].index = Int64(destination)
-   }
+//   private func move(from source: IndexSet, to destination: Int) {
+//      accountModel.savedEntities.move(fromOffsets: source, toOffset: destination)
+//      accountModel.savedEntities[IndexSet.first ?? 0].userOrder = Int
+//   }
 
    private var addButton: some View {
            switch editMode {

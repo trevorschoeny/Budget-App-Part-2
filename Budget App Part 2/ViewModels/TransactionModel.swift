@@ -26,6 +26,7 @@ class TransactionModel: ObservableObject {
    func fetchTransactions() {
       // Create a fetch request
       let request = NSFetchRequest<TransactionEntity>(entityName: "TransactionEntity")
+      request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
       do {
          // Try to fetch the fetch request and store the results in savedEntities
          savedEntities = try container.viewContext.fetch(request)

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct TransactionListView: View {
    @EnvironmentObject var model:TransactionModel
+   @EnvironmentObject var accountModel:AccountModel
    @State private var editMode = EditMode.inactive
    @State private var showingPopover = false
    
@@ -58,6 +59,7 @@ struct TransactionListView: View {
                   })
             }
             .onDelete(perform: { indexSet in
+               updateAccountBalance(indexSet: indexSet)
                model.deleteTransaction(indexSet: indexSet)
             })
          }
@@ -84,6 +86,18 @@ struct TransactionListView: View {
                return AnyView(EmptyView())
            }
        }
+   private func updateAccountBalance(indexSet: IndexSet) {
+      for i in accountModel.savedEntities {
+         if model.savedEntities[indexSet.first ?? 0].account == i.name {
+            if !model.savedEntities[indexSet.first ?? 0].debit {
+               i.balance += model.savedEntities[indexSet.first ?? 0].amount
+            } else {
+               i.balance -= model.savedEntities[indexSet.first ?? 0].amount
+            }
+         }
+      }
+      accountModel.saveData()
+   }
 }
 
 

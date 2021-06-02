@@ -29,7 +29,7 @@ struct NewTransactionView: View {
    
    @State var selectedDescription = ""
    @State var datePickerDate = Date()
-   @State var selectedAccount = AccountEntity()
+   @State var selectedAccount: AccountEntity?
    @State var selectedAccountName = "Account                    "
    @State var debitToggle = false
    @ObservedObject var selectedAmount = NumbersOnly()
@@ -51,20 +51,20 @@ struct NewTransactionView: View {
                   // MARK: Debit or Credit
                   HStack(spacing: 0) {
                      if debitToggle {
-                        Text("Debit to ")
+                        Text("Debit to . . .")
                      }
                      else {
-                        Text("Credit from ")
+                        Text("Credit from . . .")
                      }
                      // MARK: Account
-                     Picker(selection: $selectedAccount, label: Text(". . .")) {
+                     Picker(selection: $selectedAccount, label: Text("")) {
                         ForEach(accountModel.savedEntities) { a in
-                           Text(a.name ?? "no name").tag(a)
+                           Text(a.name ?? "no name").tag(a as AccountEntity?)
                         }
                      }
                      .lineLimit(1)
                      .onChange(of: selectedAccount, perform: { value in
-                        selectedAccountName = selectedAccount.name ?? "no name"
+                        selectedAccountName = selectedAccount?.name ?? "no name"
                      })
 //                     .pickerStyle(MenuPickerStyle())
 //                     .labelsHidden()
@@ -89,9 +89,11 @@ struct NewTransactionView: View {
                }
                
                // MARK: Budget
-               Picker(selection: $selectedBudgetIndex, label: Text("Budget: ")) {
-                  ForEach(0 ..< budgets.count) {
-                     Text(self.budgets[$0])
+               if !debitToggle {
+                  Picker(selection: $selectedBudgetIndex, label: Text("Budget: ")) {
+                     ForEach(0 ..< budgets.count) {
+                        Text(self.budgets[$0])
+                     }
                   }
                }
 //               .frame(height: 170)
@@ -108,88 +110,104 @@ struct NewTransactionView: View {
                }
             }
             
-            VStack() {
+            // MARK: Save Button
+            Button(action: {
                
-               // MARK: Save Button
-               Button(action: {
+               if selectedDescription == "" || selectedAmount.value == "" || selectedAmount.value.filter({ $0 == "."}).count > 1 || selectedAccountName == "Account                    " {
                   
-                  if selectedDescription == "" || selectedAmount.value == "" || selectedAmount.value.filter({ $0 == "."}).count > 1 || selectedAccountName == "Account                    " {
-                     
-                     showAlert = true
-                     
-                  }
-                  // Submit Transaction (Credit)
-                  else if !debitToggle {
-                     model.addTransaction(name: selectedDescription,
-                                          date: datePickerDate,
-                                          debit: debitToggle,
-                                          account: selectedAccountName,
-                                          amount: Double(selectedAmount.value) ?? 0.0,
-                                          budget: budgets[selectedBudgetIndex],
-                                          notes: selectedNotes)
-                     selectedDescription = ""
-                     datePickerDate = Date(timeIntervalSinceNow: 0)
-                     debitToggle = false
-//                     selectedAccount = AccountEntity()
-                     selectedAccountName = "Account                    "
-                     selectedAmount.value = ""
-                     selectedBudgetIndex = 0
-                     selectedNotes = ""
-                  }
-                  // Submit Transaction (Debit)
-                  else {
-                     model.addTransaction(name: selectedDescription,
-                                          date: datePickerDate,
-                                          debit: debitToggle,
-                                          account: selectedAccountName,
-                                          amount: Double(selectedAmount.value) ?? 0.0,
-                                          budget: "",
-                                          notes: selectedNotes)
-                     selectedDescription = ""
-                     datePickerDate = Date(timeIntervalSinceNow: 0)
-                     debitToggle = false
-//                     selectedAccount = AccountEntity()
-                     selectedAccountName = "Account                    "
-                     selectedAmount.value = ""
-                     selectedBudgetIndex = 0
-                     selectedNotes = ""
-                  }
+                  showAlert = true
                   
-               }, label: {
-                  ZStack {
-                     Rectangle()
-                        .font(.headline)
-                        .foregroundColor(Color(#colorLiteral(red: 0, green: 0.5603182912, blue: 0, alpha: 1)))
-                        .frame(height: 55)
-                        .cornerRadius(10)
-                        .padding(.horizontal)
-                     Text("Save")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                  }
-               })
-               .alert(isPresented: $showAlert, content: {
-                  Alert(title: Text("Invalid Entries"), message: Text("Please enter a valid input for each entry."), dismissButton: .default(Text("Ok")))
-               })
-               .font(.headline)
-               .foregroundColor(.white)
-               .frame(height: 55)
-               .frame(maxWidth: .infinity)
-               .background(Color(#colorLiteral(red: 0, green: 0.5603182912, blue: 0, alpha: 1)))
-               .cornerRadius(10)
-               .padding([.leading, .bottom, .trailing])
-            }
-               .navigationTitle("Add Transaction")
-            
+               }
+               // Submit Transaction (Credit)
+               else if !debitToggle {
+                  model.addTransaction(name: selectedDescription,
+                                       date: datePickerDate,
+                                       debit: debitToggle,
+                                       account: selectedAccountName,
+                                       amount: Double(selectedAmount.value) ?? 0.0,
+                                       budget: budgets[selectedBudgetIndex],
+                                       notes: selectedNotes)
+                  
+                  updateAccountBalance()
+                  
+                  selectedDescription = ""
+                  datePickerDate = Date(timeIntervalSinceNow: 0)
+                  debitToggle = false
+                  selectedAccount = accountModel.savedEntities[0]
+                  selectedAccountName = "Account                    "
+                  selectedAmount.value = ""
+                  selectedBudgetIndex = 0
+                  selectedNotes = ""
+                  accountModel.saveData()
+               }
+               // Submit Transaction (Debit)
+               else {
+                  model.addTransaction(name: selectedDescription,
+                                       date: datePickerDate,
+                                       debit: debitToggle,
+                                       account: selectedAccountName,
+                                       amount: Double(selectedAmount.value) ?? 0.0,
+                                       budget: "",
+                                       notes: selectedNotes)
+                  
+                  updateAccountBalance()
+                  
+                  selectedDescription = ""
+                  datePickerDate = Date(timeIntervalSinceNow: 0)
+                  debitToggle = false
+                  selectedAccount = accountModel.savedEntities[0]
+                  selectedAccountName = "Account                    "
+                  selectedAmount.value = ""
+                  selectedBudgetIndex = 0
+                  selectedNotes = ""
+                  accountModel.saveData()
+                  
+               }
+               
+            }, label: {
+               ZStack {
+                  Rectangle()
+                     .font(.headline)
+                     .foregroundColor(Color(#colorLiteral(red: 0, green: 0.5603182912, blue: 0, alpha: 1)))
+                     .frame(height: 55)
+                     .cornerRadius(10)
+                     .padding(.horizontal)
+                  Text("Save")
+                     .font(.headline)
+                     .foregroundColor(.white)
+               }
+            })
+            .alert(isPresented: $showAlert, content: {
+               Alert(title: Text("Invalid Entries"), message: Text("Please enter a valid input for each entry."), dismissButton: .default(Text("Ok")))
+            })
+            .font(.headline)
+            .foregroundColor(.white)
+            .frame(height: 55)
+            .frame(maxWidth: .infinity)
+            .background(Color(#colorLiteral(red: 0, green: 0.5603182912, blue: 0, alpha: 1)))
+            .cornerRadius(10)
+            .padding([.leading, .bottom, .trailing])
          }
+         .navigationTitle("Add Transaction")
       }
       .onAppear(perform: {
          if 0 < accountModel.savedEntities.count {
             selectedAccount = accountModel.savedEntities[0]
-            selectedAccountName = selectedAccount.name ?? "no name"
+            selectedAccountName = selectedAccount?.name ?? "no name"
          }
       })
     }
+   private func updateAccountBalance() {
+      for i in accountModel.savedEntities {
+         if selectedAccountName == i.name {
+            if !debitToggle {
+               i.balance -= Double(selectedAmount.value) ?? 0.0
+            } else {
+               i.balance += Double(selectedAmount.value) ?? 0.0
+            }
+         }
+      }
+   }
 }
 
 struct NewTransactionView_Previews: PreviewProvider {
