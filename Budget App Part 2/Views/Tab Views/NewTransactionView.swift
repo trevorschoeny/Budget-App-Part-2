@@ -29,7 +29,8 @@ struct NewTransactionView: View {
    
    @State var selectedDescription = ""
    @State var datePickerDate = Date()
-   @State var selectedAccount = ""
+   @State var selectedAccount = AccountEntity()
+   @State var selectedAccountName = "Account                    "
    @State var debitToggle = false
    @ObservedObject var selectedAmount = NumbersOnly()
    @State var selectedBudgetIndex = 0
@@ -48,24 +49,33 @@ struct NewTransactionView: View {
                
                VStack(alignment: .leading) {
                   // MARK: Debit or Credit
-                  HStack {
+                  HStack(spacing: 0) {
                      if debitToggle {
-                        Toggle("Debit", isOn: $debitToggle)
+                        Text("Debit to ")
                      }
                      else {
-                        Toggle("Credit", isOn: $debitToggle)
+                        Text("Credit from ")
+                     }
+                     // MARK: Account
+                     Picker(selection: $selectedAccount, label: Text(selectedAccountName)) {
+                        ForEach(accountModel.savedEntities) { a in
+                           Text(a.name ?? "no name").tag(a)
+                        }
+                     }
+                     .lineLimit(1)
+                     .onChange(of: selectedAccount, perform: { value in
+                        selectedAccountName = selectedAccount.name ?? "no name"
+                     })
+                     .pickerStyle(MenuPickerStyle())
+                     .labelsHidden()
+                     if debitToggle {
+                        Toggle("", isOn: $debitToggle)
+                     }
+                     else {
+                        Toggle("", isOn: $debitToggle)
                      }
                   }
                }
-               // MARK: Account
-               Picker(selection: $selectedAccount, label: Text("Account: ")) {
-                  ForEach(accountModel.savedEntities) { a in
-                     Text(a.name ?? "no name").tag(a)
-                  }
-               }
-//               .frame(height: 170)
-//               .pickerStyle(InlinePickerStyle())
-//               .labelsHidden()
                
                // MARK: Amount
                HStack {
@@ -94,11 +104,12 @@ struct NewTransactionView: View {
                }
             }
             
-            VStack(alignment: .leading) {
+            VStack() {
                
                // MARK: Save Button
                Button(action: {
-                  if selectedDescription == "" || selectedAmount.value == "" || selectedAmount.value.filter({ $0 == "."}).count > 1 {
+                  
+                  if selectedDescription == "" || selectedAmount.value == "" || selectedAmount.value.filter({ $0 == "."}).count > 1 || selectedAccountName == "Account                    " {
                      
                      showAlert = true
                      
@@ -108,14 +119,15 @@ struct NewTransactionView: View {
                      model.addTransaction(name: selectedDescription,
                                           date: datePickerDate,
                                           debit: debitToggle,
-                                          account: selectedAccount,
+                                          account: selectedAccountName,
                                           amount: Double(selectedAmount.value) ?? 0.0,
                                           budget: budgets[selectedBudgetIndex],
                                           notes: selectedNotes)
                      selectedDescription = ""
                      datePickerDate = Date(timeIntervalSinceNow: 0)
                      debitToggle = false
-                     selectedAccount = ""
+//                     selectedAccount = AccountEntity()
+                     selectedAccountName = "Account                    "
                      selectedAmount.value = ""
                      selectedBudgetIndex = 0
                      selectedNotes = ""
@@ -125,18 +137,20 @@ struct NewTransactionView: View {
                      model.addTransaction(name: selectedDescription,
                                           date: datePickerDate,
                                           debit: debitToggle,
-                                          account: selectedAccount,
+                                          account: selectedAccountName,
                                           amount: Double(selectedAmount.value) ?? 0.0,
                                           budget: "",
                                           notes: selectedNotes)
                      selectedDescription = ""
                      datePickerDate = Date(timeIntervalSinceNow: 0)
                      debitToggle = false
-                     selectedAccount = ""
+//                     selectedAccount = AccountEntity()
+                     selectedAccountName = "Account                    "
                      selectedAmount.value = ""
                      selectedBudgetIndex = 0
                      selectedNotes = ""
                   }
+                  
                }, label: {
                   ZStack {
                      Rectangle()
@@ -165,6 +179,12 @@ struct NewTransactionView: View {
             
          }
       }
+      .onAppear(perform: {
+         if 0 < accountModel.savedEntities.count {
+            selectedAccount = accountModel.savedEntities[0]
+            selectedAccountName = selectedAccount.name ?? "no name"
+         }
+      })
     }
 }
 

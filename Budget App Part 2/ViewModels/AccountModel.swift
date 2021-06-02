@@ -24,6 +24,7 @@ class AccountModel: ObservableObject {
    
    // MARK: fetchAccounts
    func fetchAccounts() {
+//      @FetchRequest(entity: FruitEntity.entity(), sortDescriptors: [NSSortDescriptor(keyPath: \FruitEntity.name, ascending: true)]) var fruits: FetchedResults<FruitEntity>
       // Create a fetch request
       let request = NSFetchRequest<AccountEntity>(entityName: "AccountEntity")
       do {
@@ -40,6 +41,7 @@ class AccountModel: ObservableObject {
       newAccount.name = name
       newAccount.debit = debit
       newAccount.balance = 0.0
+      newAccount.id = UUID()
       saveData()
    }
    
