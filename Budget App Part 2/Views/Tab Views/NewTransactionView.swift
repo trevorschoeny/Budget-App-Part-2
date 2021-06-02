@@ -57,7 +57,7 @@ struct NewTransactionView: View {
                         Text("Credit from ")
                      }
                      // MARK: Account
-                     Picker(selection: $selectedAccount, label: Text(selectedAccountName)) {
+                     Picker(selection: $selectedAccount, label: Text(". . .")) {
                         ForEach(accountModel.savedEntities) { a in
                            Text(a.name ?? "no name").tag(a)
                         }
@@ -66,13 +66,17 @@ struct NewTransactionView: View {
                      .onChange(of: selectedAccount, perform: { value in
                         selectedAccountName = selectedAccount.name ?? "no name"
                      })
-                     .pickerStyle(MenuPickerStyle())
-                     .labelsHidden()
+//                     .pickerStyle(MenuPickerStyle())
+//                     .labelsHidden()
+//                     .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                     Spacer()
                      if debitToggle {
                         Toggle("", isOn: $debitToggle)
+                           .frame(width: 60)
                      }
                      else {
                         Toggle("", isOn: $debitToggle)
+                           .frame(width: 60)
                      }
                   }
                }
