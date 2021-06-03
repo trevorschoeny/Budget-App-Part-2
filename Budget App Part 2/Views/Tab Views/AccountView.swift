@@ -22,14 +22,14 @@ struct AccountView: View {
                HStack {
                   if a.debit {
                      Text(a.name ?? "No Name")
-                        .foregroundColor(.green)
+//                        .foregroundColor(.green)
                      Text("•")
-                        .foregroundColor(.green)
+//                        .foregroundColor(.green)
                   } else {
                      Text(a.name ?? "No Name")
-                        .foregroundColor(.red)
+//                        .foregroundColor(.red)
                      Text("•")
-                        .foregroundColor(.red)
+//                        .foregroundColor(.red)
                   }
                   if a.balance >= 0 {
                      Text("$" + String(a.balance) )

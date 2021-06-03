@@ -47,9 +47,9 @@ struct SearchBarView: View {
       }
    }
 }
-//
+
 //struct SearchBarView_Previews: PreviewProvider {
 //   static var previews: some View {
-//      SearchBarView(text: .constant(""), isEditing: $false)
+//      SearchBarView(text: .constant(""), isSearching: false)
 //   }
 //}

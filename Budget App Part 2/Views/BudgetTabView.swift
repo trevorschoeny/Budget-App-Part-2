@@ -45,6 +45,7 @@ struct BudgetTabView: View {
             .tabItem {
                VStack {
                   Image(systemName: "plus.circle.fill")
+//                  Text("Add Transaction")
                }
             }
          AccountView()

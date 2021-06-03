@@ -11,66 +11,31 @@ struct FilteredTransactionListView: View {
    @EnvironmentObject var transactionModel:TransactionModel
    @EnvironmentObject var accountModel:AccountModel
    @EnvironmentObject var budgetModel:BudgetModel
-   @State var filteredTransactions:[TransactionEntity] = []
    
    @State private var editMode = EditMode.inactive
-   @State private var showingPopover = false
+   @State private var showingTransactionPopover = false
+   @State private var showingFilterPopover = false
    @State var isSearching = false
    
-   @State var searchText = ""
-   @State var selectedAccount: AccountEntity?
-   @State var selectedAccountName = ""
-   @State var selectedBudget: BudgetEntity?
-   @State var selectedBudgetName = ""
+   @State var searchInput = SearchParameters(firstDate: Date(), secondDate: Date())
    
-    var body: some View {
+   var body: some View {
       NavigationView {
-         List {
+         VStack {
             HStack() {
-               SearchBarView(text: $searchText, isSearching: $isSearching)
-                  .onChange(of: searchText, perform: { value in
-                     updateFilter()
-                  })
-               Menu("Filter") {
-                  Button(action: {
-                     selectedAccount = nil
-                     selectedBudget = nil
-                     selectedAccountName = ""
-                     selectedBudgetName = ""
-                     updateFilter()
-                  }, label: {
-                     Text("Clear Filter")
-                        .foregroundColor(.red)
-                  })
-//                  Text("Account")
-                  Picker(selection: $selectedAccount, label: Text("")) {
-                     ForEach(accountModel.savedEntities) { a in
-                        Text(a.name ?? "no name").tag(a as AccountEntity?)
-                     }
-                  }
-                  .lineLimit(1)
-                  .onChange(of: selectedAccount, perform: { value in
-                     selectedAccountName = selectedAccount?.name ?? "no name"
-                     updateFilter()
-                  })
-//                  .pickerStyle(WheelPickerStyle())
-                  
-//                  Text("Budget")
-                  Picker(selection: $selectedBudget, label: Text("")) {
-                     ForEach(budgetModel.savedEntities) { b in
-                        Text(b.name ?? "no name").tag(b as BudgetEntity?)
-                     }
-                     .lineLimit(1)
-                     .onChange(of: selectedBudget, perform: { value in
-                        selectedBudgetName = selectedBudget?.name ?? "no name"
-                        updateFilter()
-                     })
-                  }
-               }
+               SearchBarView(text: ($searchInput.text.bound), isSearching: $isSearching)
+               Button(action: {
+                  showingFilterPopover = true
+               }, label: {
+                  Text("Filter")
+                     .padding(.trailing, 5.0)
+               })
             }
             .padding(.vertical, 7.0)
-            if searchText == ""  && selectedAccount == nil && selectedBudget == nil {
-               ForEach(transactionModel.savedEntities) { t in
+            .padding(.horizontal)
+            List {
+               
+               ForEach(transactionModel.savedEntities.filter{t in checkFilter(t: t)}) { t in
                   NavigationLink(
                      destination: TransactionDetailView(transaction: t),
                      label: {
@@ -78,109 +43,127 @@ struct FilteredTransactionListView: View {
                      })
                }
                .onDelete(perform: { indexSet in
-                  updateAccountBalance(indexSet: indexSet)
-                  updateBudgetBalance(indexSet: indexSet)
-                  transactionModel.deleteTransaction(indexSet: indexSet)
-               })
-            } else {
-               ForEach(filteredTransactions) { t in
-                  NavigationLink(
-                     destination: TransactionDetailView(transaction: t),
-                     label: {
-                        TransactionListItemView(t: t)
-                     })
-               }
-               .onDelete(perform: { indexSet in
-                  updateAccountBalance(indexSet: indexSet)
-                  updateBudgetBalance(indexSet: indexSet)
-                  transactionModel.deleteTransaction(indexSet: indexSet)
+                  delete(indexSet: indexSet)
                })
             }
+            .navigationTitle("Transactions")
+            .navigationBarItems(leading: EditButton()/*, trailing: addButton*/)
+            .environment(\.editMode, $editMode)
          }
-         .listStyle(InsetGroupedListStyle())
-         .navigationTitle("Transactions")
-         .navigationBarItems(leading: EditButton()/*, trailing: addButton*/)
-         .environment(\.editMode, $editMode)
+         
       }
-      .popover(isPresented: $showingPopover, content: {
+      .popover(isPresented: $showingTransactionPopover, content: {
          NewTransactionView()
       })
-    }
+      .popover(isPresented: $showingFilterPopover, content: {
+         TransactionFilterView(searchInput: $searchInput)
+      })
+   }
    private var addButton: some View {
-           switch editMode {
-           case .inactive:
-            return AnyView(
-               Button(action: {
-                  showingPopover = true
-               }, label: {
-                  Image(systemName: "plus")
-               })
-            )
-           default:
-               return AnyView(EmptyView())
-           }
-       }
-   private func updateAccountBalance(indexSet: IndexSet) {
+      switch editMode {
+      case .inactive:
+         return AnyView(
+            Button(action: {
+               showingTransactionPopover = true
+            }, label: {
+               Image(systemName: "plus")
+            })
+         )
+      default:
+         return AnyView(EmptyView())
+      }
+   }
+   private func delete(indexSet: IndexSet) {
+      
+      let filteredTransactions = transactionModel.savedEntities.filter{t in checkFilter(t: t)}
+      
+      if filteredTransactions == [] {
+         updateAccountBalance(index: indexSet.first ?? 0)
+         updateBudgetBalance(index: indexSet.first ?? 0)
+         transactionModel.deleteTransaction(index: indexSet.first ?? 0)
+      } else {
+         let filteredIndex = indexSet.first ?? 0
+         var masterIndex: Int = 0
+         for i in 0..<transactionModel.savedEntities.count {
+            if filteredTransactions[filteredIndex] == transactionModel.savedEntities[i] {
+               masterIndex = i
+            }
+         }
+         updateAccountBalance(index: masterIndex)
+         updateBudgetBalance(index: masterIndex)
+         transactionModel.deleteTransaction(index: masterIndex)
+      }
+   }
+   private func updateAccountBalance(index: Int) {
       for i in accountModel.savedEntities {
-         if transactionModel.savedEntities[indexSet.first ?? 0].account == i.name {
-            if !transactionModel.savedEntities[indexSet.first ?? 0].debit {
-               i.balance += transactionModel.savedEntities[indexSet.first ?? 0].amount
+         if transactionModel.savedEntities[index].account == i.name {
+            if !transactionModel.savedEntities[index].debit {
+               i.balance += transactionModel.savedEntities[index].amount
             } else {
-               i.balance -= transactionModel.savedEntities[indexSet.first ?? 0].amount
+               i.balance -= transactionModel.savedEntities[index].amount
             }
          }
       }
       accountModel.saveData()
    }
-   private func updateBudgetBalance(indexSet: IndexSet) {
+   private func updateBudgetBalance(index: Int) {
       for i in budgetModel.savedEntities {
-         if transactionModel.savedEntities[indexSet.first ?? 0].budget == i.name {
-            i.balance += transactionModel.savedEntities[indexSet.first ?? 0].amount
+         if transactionModel.savedEntities[index].budget == i.name {
+            i.balance += transactionModel.savedEntities[index].amount
          }
       }
       budgetModel.saveData()
    }
-   private func updateFilter() {
-      if searchText != "" && selectedAccount != nil && selectedBudget != nil {
-         filteredTransactions = transactionModel.savedEntities.filter {
-               $0.name!.lowercased().contains(searchText.lowercased())
-               && $0.account!.contains(selectedAccountName)
-               && $0.budget!.contains(selectedBudgetName)
-         }
-      } else if searchText != "" && selectedAccount != nil {
-         filteredTransactions = transactionModel.savedEntities.filter {
-               $0.name!.lowercased().contains(searchText.lowercased())
-               && $0.account!.contains(selectedAccountName)
-         }
-      } else if searchText != "" && selectedBudget != nil {
-         filteredTransactions = transactionModel.savedEntities.filter {
-               $0.name!.lowercased().contains(searchText.lowercased())
-               && $0.budget!.contains(selectedBudgetName)
-         }
-      } else if selectedAccount != nil && selectedBudget != nil {
-         filteredTransactions = transactionModel.savedEntities.filter {
-               $0.account!.contains(selectedAccountName)
-               && $0.budget!.contains(selectedBudgetName)
-         }
-      } else if searchText != "" {
-            filteredTransactions = transactionModel.savedEntities.filter {
-                  $0.name!.lowercased().contains(searchText.lowercased())
-            }
-      } else if selectedAccount != nil {
-         filteredTransactions = transactionModel.savedEntities.filter {
-               $0.account!.contains(selectedAccountName)
-         }
-      } else if selectedBudget != nil {
-         filteredTransactions = transactionModel.savedEntities.filter {
-               $0.budget!.contains(selectedBudgetName)
+   func checkFilter(t: TransactionEntity) -> Bool {
+      // Account
+      
+      if searchInput.account != nil && t.account != searchInput.account?.name {
+         return false
+      }
+      // Budget
+      if searchInput.debitToggle != "Debit" {
+         if searchInput.budget != nil && t.budget != searchInput.budget?.name {
+            return false
          }
       }
+      // Debit
+      if searchInput.debitToggle == "Credit" && t.debit {
+         return false
+      }
+      // Credit
+      if searchInput.debitToggle == "Debit" && !t.debit {
+         return false
+      }
+      // Date & Date Range
+      if searchInput.dateToggle {
+         if !searchInput.dateRangeToggle {
+            if !Calendar.current.isDate(searchInput.firstDate.startOfDay, inSameDayAs:t.date?.startOfDay ?? Date()) {
+               return false
+            }
+         } else {
+            if !(t.date ?? Date() >= searchInput.firstDate.startOfDay && t.date ?? Date() <= searchInput.secondDate.startOfDay) {
+               return false
+            }
+         }
+      }
+      
+      // Text & Notes
+      let nameMatch = t.name?.lowercased().contains(searchInput.text?.lowercased() ?? "") ?? false
+      let notesMatch = t.notes?.lowercased().contains(searchInput.text?.lowercased() ?? "") ?? false
+      if (searchInput.text == nil || searchInput.text == "") {
+         return true
+      } else if nameMatch {
+         return true
+      } else if notesMatch {
+         return true
+      }
+      return false
+      
    }
 }
-
 struct FilteredTransactionListView_Previews: PreviewProvider {
-    static var previews: some View {
-        FilteredTransactionListView()
+   static var previews: some View {
+      FilteredTransactionListView()
          .environmentObject(TransactionModel())
-    }
+   }
 }

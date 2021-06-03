@@ -25,7 +25,7 @@ struct TransactionListView: View {
             }
             .onDelete(perform: { indexSet in
                updateAccountBalance(indexSet: indexSet)
-               model.deleteTransaction(indexSet: indexSet)
+//               model.deleteTransaction(indexSet: indexSet)
             })
          }
          .navigationBarTitle("Transactions")

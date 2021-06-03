@@ -61,8 +61,8 @@ class TransactionModel: ObservableObject {
    }
    
    // MARK: deleteTransaction
-   func deleteTransaction(indexSet: IndexSet) {
-      guard let index = indexSet.first else { return }
+   func deleteTransaction(index: Int) {
+//      guard let index = indexSet.first else { return }
       let entity = savedEntities[index]
       container.viewContext.delete(entity)
       saveData()
