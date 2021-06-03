@@ -26,7 +26,7 @@ class TransactionModel: ObservableObject {
    func fetchTransactions() {
       // Create a fetch request
       let request = NSFetchRequest<TransactionEntity>(entityName: "TransactionEntity")
-      request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
+      request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
       do {
          // Try to fetch the fetch request and store the results in savedEntities
          savedEntities = try container.viewContext.fetch(request)
@@ -45,7 +45,18 @@ class TransactionModel: ObservableObject {
       newTransaction.amount = amount
       newTransaction.budget = budget
       newTransaction.notes = notes
-      
+      saveData()
+   }
+   
+   // MARK: updateTransaction
+   func updateTransaction(transaction: TransactionEntity, name: String, date: Date, debit: Bool, account: String, amount: Double, budget: String, notes: String) {
+      transaction.name = name
+      transaction.date = date
+      transaction.debit = debit
+      transaction.account = account
+      transaction.amount = amount
+      transaction.budget = budget
+      transaction.notes = notes
       saveData()
    }
    

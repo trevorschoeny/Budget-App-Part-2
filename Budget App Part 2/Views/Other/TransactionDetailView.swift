@@ -9,6 +9,7 @@ import SwiftUI
 
 struct TransactionDetailView: View {
    var transaction:TransactionEntity
+   @State var showingPopover = false
    
    var body: some View {
       GeometryReader { geo in
@@ -50,7 +51,7 @@ struct TransactionDetailView: View {
                // MARK: Description
                Text(transaction.name ?? "No Name")
                   .font(.title2)
-                  .foregroundColor(Color.black)
+                  .foregroundColor(Color.gray)
                
                // MARK: Date
                HStack {
@@ -91,9 +92,20 @@ struct TransactionDetailView: View {
             .listStyle(InsetGroupedListStyle())
             .lineLimit(5)
          }
-         
-         
       }
+      .navigationBarItems(trailing: editButton)
+      .popover(isPresented: self.$showingPopover, content: {
+         EditTransactionView(inputTransaction: transaction)
+      })
+   }
+   
+   private var editButton: some View {
+      Button(action: {
+         showingPopover = true
+      }, label: {
+         Text("Edit")
+            .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+      })
    }
 }
 

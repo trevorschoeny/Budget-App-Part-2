@@ -12,6 +12,9 @@ struct AccountView: View {
    @State private var editMode = EditMode.inactive
    @State private var showingPopover = false
    
+   @State private var showAlert = false
+   @State private var selectedAccountIndexSet: IndexSet?
+   
    var body: some View {
       NavigationView {
          List {
@@ -43,7 +46,9 @@ struct AccountView: View {
                }
             }
             .onDelete(perform: { indexSet in
-               accountModel.deleteAccount(indexSet: indexSet)
+               self.selectedAccountIndexSet = indexSet
+                self.showAlert = true
+//                self.deleteIndexSet = indexSet
             })
             .onMove { (indexSet, index) in
                self.accountModel.savedEntities.move(fromOffsets: indexSet, toOffset: index)
@@ -60,11 +65,16 @@ struct AccountView: View {
       .popover(isPresented: $showingPopover, content: {
          NewAccountView()
       })
+      .alert(isPresented: $showAlert, content: {
+         Alert(title: Text("Are you sure?"),
+               message: Text("Once deleted, this account is not recoverable."),
+               primaryButton: .destructive(Text("Delete")) {
+                  self.accountModel.deleteAccount(indexSet: selectedAccountIndexSet ?? IndexSet())
+               },
+               secondaryButton: .cancel())
+      })
+      
    }
-//   private func move(from source: IndexSet, to destination: Int) {
-//      accountModel.savedEntities.move(fromOffsets: source, toOffset: destination)
-//      accountModel.savedEntities[IndexSet.first ?? 0].userOrder = Int
-//   }
 
    private var addButton: some View {
            switch editMode {

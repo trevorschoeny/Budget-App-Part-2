@@ -7,25 +7,14 @@
 
 import SwiftUI
 
-class NumbersOnly: ObservableObject {
-   @Published var value = "" {
-      didSet {
-         let filtered = value.filter { $0.isNumber || $0 == "." }
-         if value != filtered {
-             value = filtered
-         }
-      }
-   }
-}
-
-struct NewTransactionView: View {
+struct EditTransactionView: View {
    
    @Environment(\.presentationMode) var isPresented
    
    @EnvironmentObject var model:TransactionModel
    @EnvironmentObject var accountModel:AccountModel
    
-   @State var inputTransaction: TransactionEntity?
+   @State var inputTransaction: TransactionEntity
    var budgets = ["Rent & Utilities", "Groceries", "Gas", "Spending"]
    
    @State var selectedDescription = ""
@@ -38,9 +27,17 @@ struct NewTransactionView: View {
    @State var selectedNotes = ""
    @State var showAlert = false
    
+   @State var oldAmount = NumbersOnly()
+   @State var oldDebit = false
+   
     var body: some View {
       NavigationView {
          VStack {
+            Button(action: {
+               self.isPresented.wrappedValue.dismiss()
+            }, label: {
+               /*@START_MENU_TOKEN@*/Text("Button")/*@END_MENU_TOKEN@*/
+            })
             Form {
                // MARK: Description
                TextField("Add description here...", text: $selectedDescription)
@@ -123,7 +120,8 @@ struct NewTransactionView: View {
                }
                // Submit Transaction (Credit)
                else if !debitToggle {
-                  model.addTransaction(name: selectedDescription,
+                  model.updateTransaction(transaction: inputTransaction,
+                                       name: selectedDescription,
                                        date: datePickerDate,
                                        debit: debitToggle,
                                        account: selectedAccountName,
@@ -132,20 +130,11 @@ struct NewTransactionView: View {
                                        notes: selectedNotes)
                   
                   updateAccountBalance()
-                  
-                  selectedDescription = ""
-                  datePickerDate = Date(timeIntervalSinceNow: 0)
-                  debitToggle = false
-                  selectedAccount = accountModel.savedEntities[0]
-                  selectedAccountName = "Account                    "
-                  selectedAmount.value = ""
-                  selectedBudgetIndex = 0
-                  selectedNotes = ""
-                  accountModel.saveData()
                }
                // Submit Transaction (Debit)
                else {
-                  model.addTransaction(name: selectedDescription,
+                  model.updateTransaction(transaction: inputTransaction,
+                                          name: selectedDescription,
                                        date: datePickerDate,
                                        debit: debitToggle,
                                        account: selectedAccountName,
@@ -154,17 +143,6 @@ struct NewTransactionView: View {
                                        notes: selectedNotes)
                   
                   updateAccountBalance()
-                  
-                  selectedDescription = ""
-                  datePickerDate = Date(timeIntervalSinceNow: 0)
-                  debitToggle = false
-                  selectedAccount = accountModel.savedEntities[0]
-                  selectedAccountName = "Account                    "
-                  selectedAmount.value = ""
-                  selectedBudgetIndex = 0
-                  selectedNotes = ""
-                  accountModel.saveData()
-                  
                }
                self.isPresented.wrappedValue.dismiss()
                
@@ -176,7 +154,7 @@ struct NewTransactionView: View {
                      .frame(height: 55)
                      .cornerRadius(10)
                      .padding(.horizontal)
-                  Text("Save")
+                  Text("Update")
                      .font(.headline)
                      .foregroundColor(.white)
                }
@@ -192,29 +170,55 @@ struct NewTransactionView: View {
             .cornerRadius(10)
             .padding([.leading, .bottom, .trailing])
          }
-         .navigationTitle("Add Transaction")
+         .navigationTitle("Edit Transaction")
       }
       .onAppear(perform: {
          if 0 < accountModel.savedEntities.count {
-            selectedAccount = accountModel.savedEntities[0]
+            for i in 0..<accountModel.savedEntities.count {
+               if inputTransaction.account == accountModel.savedEntities[i].name {
+                  selectedAccount = accountModel.savedEntities[i]
+               }
+            }
             selectedAccountName = selectedAccount?.name ?? "no name"
+            selectedDescription = inputTransaction.name ?? "No Name"
+            datePickerDate = inputTransaction.date ?? Date()
+            debitToggle = inputTransaction.debit
+            selectedAmount.value = String(inputTransaction.amount)
+            for i in 0..<budgets.count {
+               if inputTransaction.budget == budgets[i] {
+                  selectedBudgetIndex = i
+               }
+            }
+            selectedNotes = inputTransaction.notes ?? "No Notes"
+            
+            oldAmount.value = String(inputTransaction.amount)
+            oldDebit = inputTransaction.debit
+            
+            
          }
       })
     }
    private func updateAccountBalance() {
       for i in accountModel.savedEntities {
          if selectedAccountName == i.name {
+            if !oldDebit {
+               i.balance += Double(oldAmount.value) ?? 0.0
+            } else {
+               i.balance -= Double(oldAmount.value) ?? 0.0
+            }
+            accountModel.saveData()
             if !debitToggle {
                i.balance -= Double(selectedAmount.value) ?? 0.0
             } else {
                i.balance += Double(selectedAmount.value) ?? 0.0
             }
+            accountModel.saveData()
          }
       }
    }
 }
 
-struct NewTransactionView_Previews: PreviewProvider {
+struct EditTransactionView_Previews: PreviewProvider {
     static var previews: some View {
         NewTransactionView()
          .environmentObject(TransactionModel())
