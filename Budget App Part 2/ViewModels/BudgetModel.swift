@@ -1,5 +1,5 @@
 //
-//  AccountModel.swift
+//  BudgetModel.swift
 //  Budget App Part 2
 //
 //  Created by Trevor Schoeny on 5/30/21.
@@ -8,9 +8,9 @@
 import Foundation
 import CoreData
 
-class AccountModel: ObservableObject {
+class BudgetModel: ObservableObject {
    let container: NSPersistentContainer
-   @Published var savedEntities: [AccountEntity] = []
+   @Published var savedEntities: [BudgetEntity] = []
    
    init() {
       container = NSPersistentContainer(name: "BudgetAppContainer")
@@ -19,13 +19,13 @@ class AccountModel: ObservableObject {
             print("ERROR LOADING CORE DATA. \(error)")
          }
       }
-      fetchAccounts()
+      fetchBudgets()
    }
    
-   // MARK: fetchAccounts
-   func fetchAccounts() {
+   // MARK: fetchABudgets
+   func fetchBudgets() {
       // Create a fetch request
-      let request = NSFetchRequest<AccountEntity>(entityName: "AccountEntity")
+      let request = NSFetchRequest<BudgetEntity>(entityName: "BudgetEntity")
       request.sortDescriptors = [NSSortDescriptor(key: "userOrder", ascending: true), NSSortDescriptor(key: "name", ascending: true)]
       do {
          // Try to fetch the fetch request and store the results in savedEntities
@@ -35,18 +35,18 @@ class AccountModel: ObservableObject {
       }
    }
    
-   // MARK: addAccount
-   func addAccount(name: String, debit: Bool) {
-      let newAccount = AccountEntity(context: container.viewContext)
-      newAccount.name = name
-      newAccount.debit = debit
-      newAccount.balance = 0.0
-      newAccount.id = UUID()
+   // MARK: addBudget
+   func addBudget(name: String, budgetAmount: Double) {
+      let newBudget = BudgetEntity(context: container.viewContext)
+      newBudget.name = name
+      newBudget.budgetAmount = budgetAmount
+      newBudget.balance = budgetAmount
+      newBudget.id = UUID()
       saveData()
    }
    
-   // MARK: deleteAccount
-   func deleteAccount(indexSet: IndexSet) {
+   // MARK: deleteBudget
+   func deleteBudget(indexSet: IndexSet) {
       guard let index = indexSet.first else { return }
       let entity = savedEntities[index]
       container.viewContext.delete(entity)
@@ -57,8 +57,8 @@ class AccountModel: ObservableObject {
    func saveData() {
       do {
          try container.viewContext.save()
-         // fetchAccounts() will update the UI with the new saved data
-         fetchAccounts()
+         // fetchBudgets() will update the UI with the new saved data
+         fetchBudgets()
       } catch let error {
          print("Error saving: \(error)")
       }

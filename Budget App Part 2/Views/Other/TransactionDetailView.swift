@@ -52,11 +52,12 @@ struct TransactionDetailView: View {
                Text(transaction.name ?? "No Name")
                   .font(.title2)
                   .foregroundColor(Color.gray)
+                  .multilineTextAlignment(.leading)
+                  .frame(width: geo.size.width-80)
                
                // MARK: Date
                HStack {
                   Text("Date: ")
-                     .foregroundColor(Color.black)
                   Spacer()
                   Text(transaction.date?.addingTimeInterval(0) ?? Date(), style: .date)
                      .foregroundColor(Color.gray)
@@ -67,7 +68,6 @@ struct TransactionDetailView: View {
                // MARK: Budget
                HStack {
                   Text("Budget: ")
-                     .foregroundColor(Color.black)
                   Spacer()
                   Text(transaction.budget ?? "No Budget")
                      .foregroundColor(Color.gray)
@@ -76,7 +76,6 @@ struct TransactionDetailView: View {
                // MARK: Notes
                HStack {
                   Text("Notes:")
-                     .foregroundColor(Color.black)
                   Spacer()
                   if transaction.notes == "" {
                      Text("No Notes")

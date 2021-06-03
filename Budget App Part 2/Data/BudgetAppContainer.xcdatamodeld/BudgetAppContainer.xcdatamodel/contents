@@ -7,6 +7,13 @@
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="userOrder" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
+    <entity name="BudgetEntity" representedClassName="BudgetEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="balance" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="budgetAmount" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="userOrder" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+    </entity>
     <entity name="TransactionEntity" representedClassName="TransactionEntity" syncable="YES" codeGenerationType="class">
         <attribute name="account" optional="YES" attributeType="String" customClassName="AccountEntity"/>
         <attribute name="amount" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
@@ -19,5 +26,6 @@
     <elements>
         <element name="AccountEntity" positionX="-18" positionY="81" width="128" height="104"/>
         <element name="TransactionEntity" positionX="-18" positionY="27" width="128" height="134"/>
+        <element name="BudgetEntity" positionX="-18" positionY="90" width="128" height="104"/>
     </elements>
 </model>

@@ -34,14 +34,10 @@ struct AccountView: View {
                   if a.balance >= 0 {
                      Text("$" + String(a.balance) )
                         .foregroundColor(.green)
-//                     Text("• \(a.userOrder)")
-//                        .foregroundColor(.green)
                   }
                   else {
                      Text("($" + String(abs(a.balance)) + ")")
                         .foregroundColor(.red)
-//                     Text("• \(a.userOrder)")
-//                        .foregroundColor(.red)
                   }
                }
             }

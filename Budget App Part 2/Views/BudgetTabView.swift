@@ -54,7 +54,7 @@ struct BudgetTabView: View {
                   Text("Accounts")
                }
             }
-         AnalyticsView()
+         BudgetView()
             .tabItem {
                VStack {
                   Image(systemName: "chart.pie.fill")
@@ -64,6 +64,7 @@ struct BudgetTabView: View {
       }
       .environmentObject(TransactionModel())
       .environmentObject(AccountModel())
+      .environmentObject(BudgetModel())
     }
 }
 
