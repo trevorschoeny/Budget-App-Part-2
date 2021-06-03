@@ -34,7 +34,7 @@ struct BudgetTabView: View {
                   Text("Dashboard")
                }
             }
-         TransactionListView()
+         FilteredTransactionListView()
             .tabItem {
                VStack {
                   Image(systemName: "list.bullet")
