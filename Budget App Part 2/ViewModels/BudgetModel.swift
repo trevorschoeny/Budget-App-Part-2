@@ -41,7 +41,6 @@ class BudgetModel: ObservableObject {
       newBudget.name = name
       newBudget.budgetAmount = budgetAmount
       newBudget.balance = budgetAmount
-      newBudget.id = UUID()
       saveData()
    }
    

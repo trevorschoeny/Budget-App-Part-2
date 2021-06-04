@@ -45,7 +45,6 @@ class TransactionModel: ObservableObject {
       addedTransaction.debit = newTransaction.debit
       addedTransaction.name = newTransaction.name
       addedTransaction.notes = newTransaction.notes
-      
       saveData()
    }
    

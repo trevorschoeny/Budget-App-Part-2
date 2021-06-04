@@ -1,25 +1,23 @@
 //
-//  EditTransactionView.swift
+//  NewTransactionView.swift
 //  Budget App Part 2
 //
-//  Created by Trevor Schoeny on 6/4/21.
+//  Created by Trevor Schoeny on 5/28/21.
 //
 
 import SwiftUI
 
-struct EditTransactionView: View {
+struct NewTransactionView: View {
    
    @EnvironmentObject var model:TransactionModel
    @EnvironmentObject var accountModel:AccountModel
    @EnvironmentObject var budgetModel:BudgetModel
    
+   @State var isPopover: Bool
    @Environment(\.presentationMode) var isPresented
    @State var showAlert = false
    
-   
-   @Binding var oldTransaction: NewTransaction
-   @Binding var newTransaction: NewTransaction
-   @Binding var inputTransaction: TransactionEntity
+   @State var newTransaction = NewTransaction(date: Date())
    
     var body: some View {
       NavigationView {
@@ -27,7 +25,6 @@ struct EditTransactionView: View {
             Form {
                // MARK: Description
                TextField("Add description here...", text: $newTransaction.name.bound)
-                  .foregroundColor(Color.gray)
                
                // MARK: Date
                DatePicker("Date of Transaction: ", selection: $newTransaction.date, displayedComponents: .date)
@@ -65,7 +62,6 @@ struct EditTransactionView: View {
                   Text("$ ")
                   TextField("Amount", text: $newTransaction.amount.value)
                      .keyboardType(.decimalPad)
-                     .foregroundColor(Color.gray)
                }
                
                // MARK: Budget
@@ -102,36 +98,47 @@ struct EditTransactionView: View {
                      .padding(.top, 5.0)
                   
                   TextEditor(text: $newTransaction.notes.bound)
-                     .foregroundColor(/*@START_MENU_TOKEN@*/.gray/*@END_MENU_TOKEN@*/)
                }
             }
             
-            // MARK: Cancel Button
+            // MARK: Clear Button
             Button(action: {
-               self.isPresented.wrappedValue.dismiss()
+               newTransaction.reset()
+               if isPopover {
+                  self.isPresented.wrappedValue.dismiss()
+               }
             }, label: {
-               Text("Cancel ")
-                  .foregroundColor(.blue)
+               if isPopover {
+                  Text("Cancel ")
+                     .foregroundColor(.blue)
+               } else {
+                  Text("Clear ")
+                     .foregroundColor(.blue)
+               }
             })
             .padding(.top, 5.0)
             
+            
             // MARK: Save Button
             Button(action: {
-
+               
                // Show Alert
                if newTransaction.name == "" || newTransaction.name == nil || newTransaction.amount.value == "" || newTransaction.amount.value.filter({ $0 == "."}).count > 1 || newTransaction.account == nil {
                   showAlert = true
                }
                // Submit Transaction
                else {
-                  model.updateTransaction(transaction: inputTransaction, newTransaction: newTransaction)
+                  model.addTransaction(newTransaction: newTransaction)
                   updateAccountBalance()
                   if !newTransaction.debit {
                      updateBudgetBalance()
                   }
+                  if !isPopover {
+                     newTransaction.reset()
+                  }
                }
                self.isPresented.wrappedValue.dismiss()
-
+               
             }, label: {
                ZStack {
                   Rectangle()
@@ -156,20 +163,10 @@ struct EditTransactionView: View {
             .cornerRadius(10)
             .padding([.leading, .bottom, .trailing])
          }
-         .navigationTitle("Edit Transaction")
+         .navigationTitle("Add Transaction")
       }
     }
    private func updateAccountBalance() {
-      for i in accountModel.savedEntities {
-         if oldTransaction.account?.name == i.name {
-            if !oldTransaction.debit {
-               i.balance += Double(oldTransaction.amount.value) ?? 0.0
-            } else {
-               i.balance -= Double(oldTransaction.amount.value) ?? 0.0
-            }
-            accountModel.saveData()
-         }
-      }
       for i in accountModel.savedEntities {
          if newTransaction.account?.name == i.name {
             if !newTransaction.debit {
@@ -183,12 +180,6 @@ struct EditTransactionView: View {
    }
    private func updateBudgetBalance() {
       for i in budgetModel.savedEntities {
-         if oldTransaction.budget?.name == i.name {
-            i.balance += Double(oldTransaction.amount.value) ?? 0.0
-            budgetModel.saveData()
-         }
-      }
-      for i in budgetModel.savedEntities {
          if newTransaction.budget?.name == i.name {
             i.balance -= Double(newTransaction.amount.value) ?? 0.0
             budgetModel.saveData()
@@ -197,8 +188,10 @@ struct EditTransactionView: View {
    }
 }
 
-//struct EditTransactionView_Previews: PreviewProvider {
-//    static var previews: some View {
-//      EditTransactionView(newTransaction: NewTransaction(), inputTransaction: TransactionEntity())
-//    }
-//}
+struct NewTransactionView_Previews: PreviewProvider {
+    static var previews: some View {
+      NewTransactionView(isPopover: false)
+         .environmentObject(TransactionModel())
+         .environmentObject(AccountModel())
+    }
+}

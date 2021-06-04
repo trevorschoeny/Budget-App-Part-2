@@ -39,9 +39,6 @@ struct TransactionFilterView: View {
                }
                .lineLimit(1)
                .pickerStyle(InlinePickerStyle())
-               .onChange(of: /*@START_MENU_TOKEN@*/"Value"/*@END_MENU_TOKEN@*/, perform: { value in
-                  /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Code@*/ /*@END_MENU_TOKEN@*///FIXME BY SETTING BUDGET TO NIL WHEN SELECTING DEBIT
-               })
                
                // MARK: Filter by Account
                Picker(selection: $searchInput.account, label: Text("Account")) {

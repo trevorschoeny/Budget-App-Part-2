@@ -19,27 +19,11 @@ struct AccountView: View {
       NavigationView {
          List {
             ForEach(accountModel.savedEntities) { a in
-               HStack {
-                  if a.debit {
-                     Text(a.name ?? "No Name")
-//                        .foregroundColor(.green)
-                     Text("•")
-//                        .foregroundColor(.green)
-                  } else {
-                     Text(a.name ?? "No Name")
-//                        .foregroundColor(.red)
-                     Text("•")
-//                        .foregroundColor(.red)
-                  }
-                  if a.balance >= 0 {
-                     Text("$" + String(a.balance) )
-                        .foregroundColor(.green)
-                  }
-                  else {
-                     Text("($" + String(abs(a.balance)) + ")")
-                        .foregroundColor(.red)
-                  }
-               }
+               NavigationLink(
+                  destination: AccountDetailView(account: a),
+                  label: {
+                     AccountListItemView(a: a)
+                  })
             }
             .onDelete(perform: { indexSet in
                self.selectedAccountIndexSet = indexSet

@@ -41,7 +41,7 @@ struct BudgetTabView: View {
                   Text("Transactions")
                }
             }
-         NewTransactionView()
+         NewTransactionView(isPopover: false)
             .tabItem {
                VStack {
                   Image(systemName: "plus.circle.fill")

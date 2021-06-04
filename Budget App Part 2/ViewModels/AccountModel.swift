@@ -36,12 +36,28 @@ class AccountModel: ObservableObject {
    }
    
    // MARK: addAccount
-   func addAccount(name: String, debit: Bool) {
-      let newAccount = AccountEntity(context: container.viewContext)
-      newAccount.name = name
-      newAccount.debit = debit
-      newAccount.balance = 0.0
-      newAccount.id = UUID()
+   func addAccount(newAccount: NewAccount) {
+      let account = AccountEntity(context: container.viewContext)
+      account.balance = Double(newAccount.balance.value) ?? 0.0
+      if !newAccount.debit && account.balance != 0 {
+         account.balance *= -1
+      }
+      account.debit = newAccount.debit
+      account.name = newAccount.name
+      account.notes = newAccount.notes
+      account.userOrder = 1000
+      saveData()
+   }
+   
+   // MARK: updateAccount
+   func updateAccount(account: AccountEntity, newAccount: NewAccount, oldAccount: NewAccount) {
+      account.balance = Double(newAccount.balance.value) ?? 0.0
+      if oldAccount.debit != newAccount.debit {
+         account.balance *= -1
+      }
+      account.debit = newAccount.debit
+      account.name = newAccount.name
+      account.notes = newAccount.notes
       saveData()
    }
    

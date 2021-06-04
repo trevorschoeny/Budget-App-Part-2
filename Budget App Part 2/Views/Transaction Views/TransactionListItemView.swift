@@ -11,40 +11,28 @@ struct TransactionListItemView: View {
    
    @State var t: TransactionEntity
    var body: some View {
-      VStack(alignment: .leading) {
-         Text(t.name ?? "no name")
-            .font(.title3)
-            .lineLimit(1)
-         HStack(spacing: 0) {
+      HStack {
+         VStack(alignment: .leading) {
+            Text(t.name ?? "no name")
+               .lineLimit(1)
             Text(t.date?.addingTimeInterval(0) ?? Date(), style: .date)
-               .font(.callout)
-               .fontWeight(.light)
+               .font(.footnote)
                .foregroundColor(Color.gray)
-            Text(" • ")
-               .font(.callout)
-               .fontWeight(.light)
-               .foregroundColor(Color.gray)
+         }
+         Spacer()
+         VStack(alignment: .trailing) {
             if !t.debit {
                Text("($\(String(t.amount)))")
-                  .font(.callout)
-                  .fontWeight(.light)
                   .foregroundColor(Color.red)
             } else {
                Text(String(t.amount))
-                  .font(.callout)
-                  .fontWeight(.light)
                   .foregroundColor(Color.green)
             }
-            Text(" • ")
-               .font(.callout)
-               .fontWeight(.light)
-               .foregroundColor(Color.gray)
             Text(t.account ?? "no account")
-               .font(.callout)
-               .fontWeight(.light)
-               .foregroundColor(Color.gray)
+               .font(.footnote)
                .lineLimit(1)
          }
+         .foregroundColor(Color.gray)
       }
    }
 }

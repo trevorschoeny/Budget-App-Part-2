@@ -19,10 +19,20 @@ struct TransactionDetailView: View {
    @State var showingPopover = false
    
    var body: some View {
-      GeometryReader { geo in
-         VStack(alignment: .leading, spacing: 0.0) {
-            List {
-               
+      VStack(alignment: .leading, spacing: 0.0) {
+         List {
+            
+            // MARK: Description
+            HStack {
+               Text(transaction.name ?? "No Name")
+                  .font(.largeTitle)
+                  .multilineTextAlignment(.leading)
+               Spacer()
+            }
+            .padding(.vertical, 5.0)
+            
+            HStack {
+               Spacer()
                VStack {
                   // MARK: Amount
                   if transaction.debit {
@@ -43,63 +53,53 @@ struct TransactionDetailView: View {
                      Text("to " + (transaction.account ?? "No Account"))
                         .font(.title2)
                         .fontWeight(.light)
-                        .foregroundColor(Color.green)
+                     //                        .foregroundColor(Color.green)
                   }
                   else {
                      Text("from " + (transaction.account ?? "No Account"))
                         .font(.title2)
                         .fontWeight(.light)
-                        .foregroundColor(Color.red)
+                     //                        .foregroundColor(Color.red)
                   }
                }
                .padding(.vertical)
-               .frame(width: geo.size.width-80)
-               
-               // MARK: Description
-               Text(transaction.name ?? "No Name")
-                  .font(.title2)
+               Spacer()
+            }
+            
+            // MARK: Date
+            HStack {
+               Text("Date: ")
                   .foregroundColor(Color.gray)
-                  .multilineTextAlignment(.leading)
-                  .frame(width: geo.size.width-80)
-               
-               // MARK: Date
-               HStack {
-                  Text("Date: ")
-                  Spacer()
-                  Text(transaction.date?.addingTimeInterval(0) ?? Date(), style: .date)
-                     .foregroundColor(Color.gray)
-               }
-               
-               
-               
+               Spacer()
+               Text(transaction.date?.addingTimeInterval(0) ?? Date(), style: .date)
+            }
+            
+            if !transaction.debit {
                // MARK: Budget
                HStack {
                   Text("Budget: ")
-                  Spacer()
-                  Text(transaction.budget ?? "No Budget")
                      .foregroundColor(Color.gray)
-               }
-               
-               // MARK: Notes
-               HStack {
-                  Text("Notes:")
                   Spacer()
-                  if transaction.notes == "" {
-                     Text("No Notes")
-                        .foregroundColor(Color.gray)
-                  }
-                  else {
-                     Text(transaction.notes ?? "No Notes")
-                        .foregroundColor(Color.gray)
-                        .multilineTextAlignment(.leading)
-                  }
+                  Text(transaction.budget ?? "")
                }
             }
-            .listStyle(InsetGroupedListStyle())
-            .lineLimit(5)
+            
+            // MARK: Notes
+            VStack(alignment: .leading) {
+               Text("Notes:")
+                  .foregroundColor(Color.gray)
+                  .padding(.vertical, 6.0)
+               if transaction.notes != "" && transaction.notes != nil {
+                  Text(transaction.notes ?? "")
+                     .multilineTextAlignment(.leading)
+                     .padding(.bottom, 6.0)
+               }
+            }
          }
+         .listStyle(InsetGroupedListStyle())
       }
       .navigationBarItems(trailing: editButton)
+      .navigationBarTitleDisplayMode(.inline)
       .popover(isPresented: self.$showingPopover, content: {
          EditTransactionView(oldTransaction: $oldTransaction, newTransaction: $newTransaction, inputTransaction: $transaction)
       })
@@ -115,24 +115,8 @@ struct TransactionDetailView: View {
       })
    }
    func prepareNewTransaction() {
-      for a in accountModel.savedEntities {
-         if transaction.account == a.name {
-            newTransaction.account = a
-         }
-      }
-      newTransaction.amount.value = String(transaction.amount)
-      if !transaction.debit {
-         for b in budgetModel.savedEntities {
-            if transaction.budget == b.name {
-               newTransaction.budget = b
-            }
-         }
-      }
-      newTransaction.date = transaction.date ?? Date()
-      newTransaction.debit = transaction.debit
-      newTransaction.name = transaction.name
-      newTransaction.notes = transaction.notes
       
+      // Old Account
       for a in accountModel.savedEntities {
          if transaction.account == a.name {
             oldTransaction.account = a
@@ -150,6 +134,25 @@ struct TransactionDetailView: View {
       oldTransaction.debit = transaction.debit
       oldTransaction.name = transaction.name
       oldTransaction.notes = transaction.notes
+      
+      // New Account
+      for a in accountModel.savedEntities {
+         if transaction.account == a.name {
+            newTransaction.account = a
+         }
+      }
+      newTransaction.amount.value = String(transaction.amount)
+      if !transaction.debit {
+         for b in budgetModel.savedEntities {
+            if transaction.budget == b.name {
+               newTransaction.budget = b
+            }
+         }
+      }
+      newTransaction.date = transaction.date ?? Date()
+      newTransaction.debit = transaction.debit
+      newTransaction.name = transaction.name
+      newTransaction.notes = transaction.notes
    }
 }
 

@@ -31,7 +31,7 @@ struct FilteredTransactionListView: View {
                      .padding(.trailing, 5.0)
                })
                .popover(isPresented: $showingTransactionPopover, content: {
-                  NewTransactionView()
+                  NewTransactionView(isPopover: true)
                })
             }
             .padding(.vertical, 7.0)

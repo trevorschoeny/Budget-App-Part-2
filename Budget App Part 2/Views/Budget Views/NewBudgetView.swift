@@ -1,53 +1,61 @@
 //
-//  NewAccountView.swift
+//  NewBudgetView.swift
 //  Budget App Part 2
 //
-//  Created by Trevor Schoeny on 5/30/21.
+//  Created by Trevor Schoeny on 6/2/21.
 //
 
 import SwiftUI
 
-struct NewAccountView: View {
+struct NewBudgetView: View {
    
-   @EnvironmentObject var accountModel: AccountModel
+   @EnvironmentObject var budgetModel: BudgetModel
    
-   @Environment(\.presentationMode) var presentationMode
+   @Environment(\.presentationMode) var isPresented
    @State var selectedName = ""
    @State var showAlert = false
-   @State var debitToggle = true
+   @State var selectedAmount = NumbersOnly()
    
    var body: some View {
       NavigationView {
-         VStack(alignment: .leading, spacing: 20) {
+         VStack {
             
             Form {
                // MARK: Name
-               TextField("Add account name here...", text: $selectedName)
+               TextField("Add budget name here...", text: $selectedName)
                
-               // MARK: Credit or Debit
-               VStack(alignment: .leading) {
-                  if !debitToggle {
-                     Toggle("Credit Account", isOn: $debitToggle)
-                  }
-                  else {
-                     Toggle("Debit Account", isOn: $debitToggle)
-                  }
+               HStack {
+                  Text("$ ")
+                  TextField("Budget Amount", text: $selectedAmount.value)
+                     .keyboardType(.decimalPad)
+                     .foregroundColor(Color.gray)
                }
             }
             
+            // MARK: Cancel Button
+            Button(action: {
+               selectedName = ""
+               selectedAmount.value = ""
+               self.isPresented.wrappedValue.dismiss()
+            }, label: {
+               Text("Cancel ")
+                  .foregroundColor(.blue)
+            })
+            .padding(.top, 5.0)
+            
             // MARK: Save Button
             Button(action: {
-               if selectedName == "" {
+               if selectedName == "" || selectedAmount.value.filter({ $0 == "."}).count > 1 {
                   
                   showAlert = true
                   
                }
                // Save Account
                else {
-                  accountModel.addAccount(name: selectedName, debit: debitToggle)
+                  budgetModel.addBudget(name: selectedName, budgetAmount: Double(selectedAmount.value) ?? 0.0)
                   selectedName = ""
-                  debitToggle = true
-                  self.presentationMode.wrappedValue.dismiss()
+                  selectedAmount.value = ""
+                  self.isPresented.wrappedValue.dismiss()
                }
                
             }, label: {
@@ -68,13 +76,13 @@ struct NewAccountView: View {
                Alert(title: Text("Invalid Entry"), message: Text("Please enter a valid input."), dismissButton: .default(Text("Ok")))
             })
          }
-         .navigationTitle("Add Account")
+         .navigationTitle("Add Budget")
       }
    }
 }
 
-struct NewAccountView_Previews: PreviewProvider {
+struct NewBudgetView_Previews: PreviewProvider {
     static var previews: some View {
-        NewAccountView()
+        NewBudgetView()
     }
 }

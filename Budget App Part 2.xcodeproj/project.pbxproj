@@ -13,7 +13,6 @@
 		B106F19B26614A4B00FD3DD3 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B106F19A26614A4B00FD3DD3 /* Preview Assets.xcassets */; };
 		B106F1AC26614E2E00FD3DD3 /* TransactionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B106F1AB26614E2E00FD3DD3 /* TransactionModel.swift */; };
 		B106F1B0266152BF00FD3DD3 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B106F1AF266152BF00FD3DD3 /* DashboardView.swift */; };
-		B106F1B2266152F600FD3DD3 /* TransactionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B106F1B1266152F600FD3DD3 /* TransactionListView.swift */; };
 		B106F1B42661532B00FD3DD3 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B106F1B32661532B00FD3DD3 /* AccountView.swift */; };
 		B106F1B62661533900FD3DD3 /* BudgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B106F1B52661533900FD3DD3 /* BudgetView.swift */; };
 		B106F1BC26615B7700FD3DD3 /* TransactionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B106F1BB26615B7700FD3DD3 /* TransactionDetailView.swift */; };
@@ -30,6 +29,10 @@
 		B1193845266987EC003C9005 /* OptionalExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1193844266987EC003C9005 /* OptionalExtension.swift */; };
 		B11938472669E101003C9005 /* NewTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B11938462669E101003C9005 /* NewTransaction.swift */; };
 		B11938492669EAEE003C9005 /* EditTransactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B11938482669EAEE003C9005 /* EditTransactionView.swift */; };
+		B119384F266A8DA6003C9005 /* AccountListItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B119384E266A8DA6003C9005 /* AccountListItemView.swift */; };
+		B1193851266A9475003C9005 /* AccountDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1193850266A9475003C9005 /* AccountDetailView.swift */; };
+		B1193855266AA5F9003C9005 /* EditAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1193854266AA5F9003C9005 /* EditAccountView.swift */; };
+		B1193857266AA659003C9005 /* NewAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1193856266AA659003C9005 /* NewAccount.swift */; };
 		B15333B22664073C00C19617 /* BudgetAppContainer.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B15333B02664073C00C19617 /* BudgetAppContainer.xcdatamodeld */; };
 		B177869F2664594000A6A572 /* AccountModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B177869E2664594000A6A572 /* AccountModel.swift */; };
 		B17786A126646DD900A6A572 /* NewAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B17786A026646DD900A6A572 /* NewAccountView.swift */; };
@@ -62,6 +65,10 @@
 		B1193844266987EC003C9005 /* OptionalExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalExtension.swift; sourceTree = "<group>"; };
 		B11938462669E101003C9005 /* NewTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTransaction.swift; sourceTree = "<group>"; };
 		B11938482669EAEE003C9005 /* EditTransactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTransactionView.swift; sourceTree = "<group>"; };
+		B119384E266A8DA6003C9005 /* AccountListItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountListItemView.swift; sourceTree = "<group>"; };
+		B1193850266A9475003C9005 /* AccountDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDetailView.swift; sourceTree = "<group>"; };
+		B1193854266AA5F9003C9005 /* EditAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAccountView.swift; sourceTree = "<group>"; };
+		B1193856266AA659003C9005 /* NewAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAccount.swift; sourceTree = "<group>"; };
 		B15333B12664073C00C19617 /* BudgetAppContainer.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = BudgetAppContainer.xcdatamodel; sourceTree = "<group>"; };
 		B177869E2664594000A6A572 /* AccountModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountModel.swift; sourceTree = "<group>"; };
 		B17786A026646DD900A6A572 /* NewAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAccountView.swift; sourceTree = "<group>"; };
@@ -121,8 +128,10 @@
 			isa = PBXGroup;
 			children = (
 				B106F19526614A4A00FD3DD3 /* BudgetTabView.swift */,
-				B106F1B926615B3800FD3DD3 /* Tab Views */,
-				B106F1BA26615B3F00FD3DD3 /* Other */,
+				B106F1AF266152BF00FD3DD3 /* DashboardView.swift */,
+				B119384B266A8962003C9005 /* Transaction Views */,
+				B119384C266A8C1E003C9005 /* Account Views */,
+				B119384D266A8C41003C9005 /* Budget Views */,
 				B119381926688CDC003C9005 /* Mini Views */,
 				B11938222668C005003C9005 /* Retired */,
 			);
@@ -142,8 +151,9 @@
 		B106F1A426614B1D00FD3DD3 /* Models & Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				B1193840266966D7003C9005 /* SearchParameters.swift */,
 				B11938462669E101003C9005 /* NewTransaction.swift */,
+				B1193856266AA659003C9005 /* NewAccount.swift */,
+				B1193840266966D7003C9005 /* SearchParameters.swift */,
 				B11938202668BDE0003C9005 /* NumbersOnly.swift */,
 				B11938422669872E003C9005 /* DateExtension.swift */,
 				B1193844266987EC003C9005 /* OptionalExtension.swift */,
@@ -159,34 +169,9 @@
 			path = Data;
 			sourceTree = "<group>";
 		};
-		B106F1B926615B3800FD3DD3 /* Tab Views */ = {
-			isa = PBXGroup;
-			children = (
-				B106F1AF266152BF00FD3DD3 /* DashboardView.swift */,
-				B119381C26688FD8003C9005 /* FilteredTransactionListView.swift */,
-				B106F1B7266159CB00FD3DD3 /* NewTransactionView.swift */,
-				B106F1B32661532B00FD3DD3 /* AccountView.swift */,
-				B106F1B52661533900FD3DD3 /* BudgetView.swift */,
-			);
-			path = "Tab Views";
-			sourceTree = "<group>";
-		};
-		B106F1BA26615B3F00FD3DD3 /* Other */ = {
-			isa = PBXGroup;
-			children = (
-				B106F1BB26615B7700FD3DD3 /* TransactionDetailView.swift */,
-				B11938482669EAEE003C9005 /* EditTransactionView.swift */,
-				B17786A026646DD900A6A572 /* NewAccountView.swift */,
-				B119381726686E0F003C9005 /* NewBudgetView.swift */,
-				B1193823266931C8003C9005 /* TransactionFilterView.swift */,
-			);
-			path = Other;
-			sourceTree = "<group>";
-		};
 		B119381926688CDC003C9005 /* Mini Views */ = {
 			isa = PBXGroup;
 			children = (
-				B119381A26688D15003C9005 /* TransactionListItemView.swift */,
 				B119381E26689445003C9005 /* SearchBarView.swift */,
 			);
 			path = "Mini Views";
@@ -195,10 +180,44 @@
 		B11938222668C005003C9005 /* Retired */ = {
 			isa = PBXGroup;
 			children = (
-				B10B1967266832C80098BDB7 /* OldEditTransactionView.swift */,
 				B106F1B1266152F600FD3DD3 /* TransactionListView.swift */,
+				B10B1967266832C80098BDB7 /* OldEditTransactionView.swift */,
 			);
 			path = Retired;
+			sourceTree = "<group>";
+		};
+		B119384B266A8962003C9005 /* Transaction Views */ = {
+			isa = PBXGroup;
+			children = (
+				B119381C26688FD8003C9005 /* FilteredTransactionListView.swift */,
+				B1193823266931C8003C9005 /* TransactionFilterView.swift */,
+				B106F1B7266159CB00FD3DD3 /* NewTransactionView.swift */,
+				B106F1BB26615B7700FD3DD3 /* TransactionDetailView.swift */,
+				B11938482669EAEE003C9005 /* EditTransactionView.swift */,
+				B119381A26688D15003C9005 /* TransactionListItemView.swift */,
+			);
+			path = "Transaction Views";
+			sourceTree = "<group>";
+		};
+		B119384C266A8C1E003C9005 /* Account Views */ = {
+			isa = PBXGroup;
+			children = (
+				B106F1B32661532B00FD3DD3 /* AccountView.swift */,
+				B17786A026646DD900A6A572 /* NewAccountView.swift */,
+				B1193850266A9475003C9005 /* AccountDetailView.swift */,
+				B1193854266AA5F9003C9005 /* EditAccountView.swift */,
+				B119384E266A8DA6003C9005 /* AccountListItemView.swift */,
+			);
+			path = "Account Views";
+			sourceTree = "<group>";
+		};
+		B119384D266A8C41003C9005 /* Budget Views */ = {
+			isa = PBXGroup;
+			children = (
+				B106F1B52661533900FD3DD3 /* BudgetView.swift */,
+				B119381726686E0F003C9005 /* NewBudgetView.swift */,
+			);
+			path = "Budget Views";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -275,8 +294,11 @@
 				B17786A126646DD900A6A572 /* NewAccountView.swift in Sources */,
 				B11938432669872E003C9005 /* DateExtension.swift in Sources */,
 				B106F1BC26615B7700FD3DD3 /* TransactionDetailView.swift in Sources */,
+				B1193857266AA659003C9005 /* NewAccount.swift in Sources */,
 				B1193841266966D7003C9005 /* SearchParameters.swift in Sources */,
+				B1193855266AA5F9003C9005 /* EditAccountView.swift in Sources */,
 				B119381B26688D15003C9005 /* TransactionListItemView.swift in Sources */,
+				B119384F266A8DA6003C9005 /* AccountListItemView.swift in Sources */,
 				B106F1AC26614E2E00FD3DD3 /* TransactionModel.swift in Sources */,
 				B106F19626614A4A00FD3DD3 /* BudgetTabView.swift in Sources */,
 				B11938492669EAEE003C9005 /* EditTransactionView.swift in Sources */,
@@ -284,7 +306,6 @@
 				B106F19426614A4A00FD3DD3 /* Budget_App_Part_2App.swift in Sources */,
 				B1193824266931C8003C9005 /* TransactionFilterView.swift in Sources */,
 				B106F1B42661532B00FD3DD3 /* AccountView.swift in Sources */,
-				B106F1B2266152F600FD3DD3 /* TransactionListView.swift in Sources */,
 				B119381F26689445003C9005 /* SearchBarView.swift in Sources */,
 				B119381D26688FD8003C9005 /* FilteredTransactionListView.swift in Sources */,
 				B119381426685FBB003C9005 /* NewTransactionView.swift in Sources */,
@@ -293,6 +314,7 @@
 				B15333B22664073C00C19617 /* BudgetAppContainer.xcdatamodeld in Sources */,
 				B119381826686E0F003C9005 /* NewBudgetView.swift in Sources */,
 				B106F1B0266152BF00FD3DD3 /* DashboardView.swift in Sources */,
+				B1193851266A9475003C9005 /* AccountDetailView.swift in Sources */,
 				B11938472669E101003C9005 /* NewTransaction.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
