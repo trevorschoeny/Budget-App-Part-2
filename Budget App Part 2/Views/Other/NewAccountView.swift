@@ -35,7 +35,6 @@ struct NewAccountView: View {
                }
             }
             
-            
             // MARK: Save Button
             Button(action: {
                if selectedName == "" {

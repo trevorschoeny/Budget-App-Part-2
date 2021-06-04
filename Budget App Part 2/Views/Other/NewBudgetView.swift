@@ -32,7 +32,6 @@ struct NewBudgetView: View {
                }
             }
             
-            
             // MARK: Save Button
             Button(action: {
                if selectedName == "" || selectedAmount.value.filter({ $0 == "."}).count > 1 {

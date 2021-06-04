@@ -1,8 +1,8 @@
 //
-//  NewTransactionView.swift
+//  EditTransactionView.swift
 //  Budget App Part 2
 //
-//  Created by Trevor Schoeny on 5/28/21.
+//  Created by Trevor Schoeny on 6/4/21.
 //
 
 import SwiftUI
@@ -16,64 +16,45 @@ struct EditTransactionView: View {
    @Environment(\.presentationMode) var isPresented
    @State var showAlert = false
    
-   @State var inputTransaction: TransactionEntity
    
-   @State var selectedDescription = ""
-   @State var datePickerDate = Date()
-   
-   @State var selectedAccount: AccountEntity?
-   @State var selectedAccountName = ""
-   @State var oldAccountName = ""
-   
-   @State var debitToggle = false
-   @ObservedObject var selectedAmount = NumbersOnly()
-   
-   @State var selectedBudget: BudgetEntity?
-   @State var selectedBudgetName = ""
-   @State var oldBudgetName = ""
-   
-   @State var selectedNotes = ""
-   
-   @State var oldAmount = NumbersOnly()
-   @State var oldDebit = false
+   @Binding var oldTransaction: NewTransaction
+   @Binding var newTransaction: NewTransaction
+   @Binding var inputTransaction: TransactionEntity
    
     var body: some View {
       NavigationView {
          VStack {
             Form {
                // MARK: Description
-               TextField("Add description here...", text: $selectedDescription)
+               TextField("Add description here...", text: $newTransaction.name.bound)
                   .foregroundColor(Color.gray)
                
                // MARK: Date
-               DatePicker("Date of Transaction: ", selection: $datePickerDate, displayedComponents: .date)
+               DatePicker("Date of Transaction: ", selection: $newTransaction.date, displayedComponents: .date)
                
                VStack(alignment: .leading) {
                   // MARK: Debit or Credit
                   HStack(spacing: 0) {
-                     if debitToggle {
+                     if newTransaction.debit {
                         Text("Debit to . . .")
                      }
                      else {
                         Text("Credit from . . .")
                      }
                      // MARK: Account
-                     Picker(selection: $selectedAccount, label: Text("")) {
+                     Picker(selection: $newTransaction.account, label: Text("")) {
                         ForEach(accountModel.savedEntities) { a in
                            Text(a.name ?? "no name").tag(a as AccountEntity?)
                         }
                      }
                      .lineLimit(1)
-                     .onChange(of: selectedAccount, perform: { value in
-                        selectedAccountName = selectedAccount?.name ?? "no name"
-                     })
                      Spacer()
-                     if debitToggle {
-                        Toggle("", isOn: $debitToggle)
+                     if newTransaction.debit {
+                        Toggle("", isOn: $newTransaction.debit)
                            .frame(width: 60)
                      }
                      else {
-                        Toggle("", isOn: $debitToggle)
+                        Toggle("", isOn: $newTransaction.debit)
                            .frame(width: 60)
                      }
                   }
@@ -82,25 +63,37 @@ struct EditTransactionView: View {
                // MARK: Amount
                HStack {
                   Text("$ ")
-                  TextField("Amount", text: $selectedAmount.value)
+                  TextField("Amount", text: $newTransaction.amount.value)
                      .keyboardType(.decimalPad)
                      .foregroundColor(Color.gray)
                }
                
                // MARK: Budget
-               if !debitToggle {
+               if !newTransaction.debit {
                   HStack {
                      Text("Budget:")
-                     Picker(selection: $selectedBudget, label: Text("")) {
+                     Picker(selection: $newTransaction.budget, label: Text("")) {
                         ForEach(budgetModel.savedEntities) { b in
                            Text(b.name ?? "no name").tag(b as BudgetEntity?)
                         }
                         .lineLimit(1)
-                        .onChange(of: selectedBudget, perform: { value in
-                           selectedBudgetName = selectedBudget?.name ?? "no name"
-                        })
                      }
                   }
+               }
+               
+               // MARK: Remove Budget
+               if newTransaction.budget != nil {
+                  HStack {
+                     Spacer()
+                     Button(action: {
+                        newTransaction.budget = nil
+                     }, label: {
+                        Text("Clear Budget")
+                           .foregroundColor(.blue)
+                     })
+                     Spacer()
+                  }
+                  
                }
                
                //MARK: Notes
@@ -108,48 +101,37 @@ struct EditTransactionView: View {
                   Text("Notes: ")
                      .padding(.top, 5.0)
                   
-                  TextEditor(text: $selectedNotes)
+                  TextEditor(text: $newTransaction.notes.bound)
                      .foregroundColor(/*@START_MENU_TOKEN@*/.gray/*@END_MENU_TOKEN@*/)
                }
             }
             
+            // MARK: Cancel Button
+            Button(action: {
+               self.isPresented.wrappedValue.dismiss()
+            }, label: {
+               Text("Cancel ")
+                  .foregroundColor(.blue)
+            })
+            .padding(.top, 5.0)
+            
             // MARK: Save Button
             Button(action: {
-               
-               if selectedDescription == "" || selectedAmount.value == "" || selectedAmount.value.filter({ $0 == "."}).count > 1 || selectedAccountName == "Account                    " {
-                  
+
+               // Show Alert
+               if newTransaction.name == "" || newTransaction.name == nil || newTransaction.amount.value == "" || newTransaction.amount.value.filter({ $0 == "."}).count > 1 || newTransaction.account == nil {
                   showAlert = true
-                  
                }
-               // Submit Transaction (Credit)
-               else if !debitToggle {
-                  model.updateTransaction(transaction: inputTransaction,
-                                       name: selectedDescription,
-                                       date: datePickerDate,
-                                       debit: debitToggle,
-                                       account: selectedAccountName,
-                                       amount: Double(selectedAmount.value) ?? 0.0,
-                                       budget: selectedBudgetName,
-                                       notes: selectedNotes)
-                  
-                  updateAccountBalance()
-                  updateBudgetBalance()
-               }
-               // Submit Transaction (Debit)
+               // Submit Transaction
                else {
-                  model.updateTransaction(transaction: inputTransaction,
-                                          name: selectedDescription,
-                                       date: datePickerDate,
-                                       debit: debitToggle,
-                                       account: selectedAccountName,
-                                       amount: Double(selectedAmount.value) ?? 0.0,
-                                       budget: "",
-                                       notes: selectedNotes)
-                  
+                  model.updateTransaction(transaction: inputTransaction, newTransaction: newTransaction)
                   updateAccountBalance()
+                  if !newTransaction.debit {
+                     updateBudgetBalance()
+                  }
                }
                self.isPresented.wrappedValue.dismiss()
-               
+
             }, label: {
                ZStack {
                   Rectangle()
@@ -158,7 +140,7 @@ struct EditTransactionView: View {
                      .frame(height: 55)
                      .cornerRadius(10)
                      .padding(.horizontal)
-                  Text("Update")
+                  Text("Save")
                      .font(.headline)
                      .foregroundColor(.white)
                }
@@ -176,52 +158,24 @@ struct EditTransactionView: View {
          }
          .navigationTitle("Edit Transaction")
       }
-      .onAppear(perform: {
-         if 0 < accountModel.savedEntities.count {
-            for i in 0..<accountModel.savedEntities.count {
-               if inputTransaction.account == accountModel.savedEntities[i].name {
-                  selectedAccount = accountModel.savedEntities[i]
-               }
-            }
-            selectedAccountName = selectedAccount?.name ?? "no name"
-            oldAccountName = selectedAccount?.name ?? "no name"
-            selectedDescription = inputTransaction.name ?? "No Name"
-            datePickerDate = inputTransaction.date ?? Date()
-            debitToggle = inputTransaction.debit
-            selectedAmount.value = String(inputTransaction.amount)
-            for i in 0..<budgetModel.savedEntities.count {
-               if inputTransaction.budget == budgetModel.savedEntities[i].name {
-                  selectedBudget = budgetModel.savedEntities[i]
-               }
-            }
-            selectedBudgetName = selectedBudget?.name ?? "no name"
-            oldBudgetName = selectedBudget?.name ?? "no name"
-            selectedNotes = inputTransaction.notes ?? "No Notes"
-            
-            oldAmount.value = String(inputTransaction.amount)
-            oldDebit = inputTransaction.debit
-            
-            
-         }
-      })
     }
    private func updateAccountBalance() {
       for i in accountModel.savedEntities {
-         if oldAccountName == i.name {
-            if !oldDebit {
-               i.balance += Double(oldAmount.value) ?? 0.0
+         if oldTransaction.account?.name == i.name {
+            if !oldTransaction.debit {
+               i.balance += Double(oldTransaction.amount.value) ?? 0.0
             } else {
-               i.balance -= Double(oldAmount.value) ?? 0.0
+               i.balance -= Double(oldTransaction.amount.value) ?? 0.0
             }
             accountModel.saveData()
          }
       }
       for i in accountModel.savedEntities {
-         if selectedAccountName == i.name {
-            if !debitToggle {
-               i.balance -= Double(selectedAmount.value) ?? 0.0
+         if newTransaction.account?.name == i.name {
+            if !newTransaction.debit {
+               i.balance -= Double(newTransaction.amount.value) ?? 0.0
             } else {
-               i.balance += Double(selectedAmount.value) ?? 0.0
+               i.balance += Double(newTransaction.amount.value) ?? 0.0
             }
             accountModel.saveData()
          }
@@ -229,34 +183,22 @@ struct EditTransactionView: View {
    }
    private func updateBudgetBalance() {
       for i in budgetModel.savedEntities {
-         if oldBudgetName == i.name {
-            print("MARKER 1")
-            print(oldBudgetName)
-            print(oldAmount.value)
-            print(i.balance)
-            i.balance += Double(oldAmount.value) ?? 0.0
-            print(i.balance)
+         if oldTransaction.budget?.name == i.name {
+            i.balance += Double(oldTransaction.amount.value) ?? 0.0
             budgetModel.saveData()
          }
       }
       for i in budgetModel.savedEntities {
-         if selectedBudgetName == i.name {
-            print("MARKER 2")
-            print(selectedBudgetName)
-            print(selectedAmount.value)
-            print(i.balance)
-            i.balance -= Double(selectedAmount.value) ?? 0.0
-            print(i.balance)
+         if newTransaction.budget?.name == i.name {
+            i.balance -= Double(newTransaction.amount.value) ?? 0.0
             budgetModel.saveData()
          }
       }
    }
 }
 
-struct EditTransactionView_Previews: PreviewProvider {
-    static var previews: some View {
-        NewTransactionView()
-         .environmentObject(TransactionModel())
-         .environmentObject(AccountModel())
-    }
-}
+//struct EditTransactionView_Previews: PreviewProvider {
+//    static var previews: some View {
+//      EditTransactionView(newTransaction: NewTransaction(), inputTransaction: TransactionEntity())
+//    }
+//}

@@ -8,7 +8,14 @@
 import SwiftUI
 
 struct TransactionDetailView: View {
-   var transaction:TransactionEntity
+   
+   @EnvironmentObject var model:TransactionModel
+   @EnvironmentObject var accountModel:AccountModel
+   @EnvironmentObject var budgetModel:BudgetModel
+   
+   @State var transaction: TransactionEntity
+   @State var oldTransaction = NewTransaction(date: Date())
+   @State var newTransaction = NewTransaction(date: Date())
    @State var showingPopover = false
    
    var body: some View {
@@ -94,17 +101,55 @@ struct TransactionDetailView: View {
       }
       .navigationBarItems(trailing: editButton)
       .popover(isPresented: self.$showingPopover, content: {
-         EditTransactionView(inputTransaction: transaction)
+         EditTransactionView(oldTransaction: $oldTransaction, newTransaction: $newTransaction, inputTransaction: $transaction)
       })
    }
    
    private var editButton: some View {
       Button(action: {
+         prepareNewTransaction()
          showingPopover = true
       }, label: {
          Text("Edit")
-            .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+            .foregroundColor(.blue)
       })
+   }
+   func prepareNewTransaction() {
+      for a in accountModel.savedEntities {
+         if transaction.account == a.name {
+            newTransaction.account = a
+         }
+      }
+      newTransaction.amount.value = String(transaction.amount)
+      if !transaction.debit {
+         for b in budgetModel.savedEntities {
+            if transaction.budget == b.name {
+               newTransaction.budget = b
+            }
+         }
+      }
+      newTransaction.date = transaction.date ?? Date()
+      newTransaction.debit = transaction.debit
+      newTransaction.name = transaction.name
+      newTransaction.notes = transaction.notes
+      
+      for a in accountModel.savedEntities {
+         if transaction.account == a.name {
+            oldTransaction.account = a
+         }
+      }
+      oldTransaction.amount.value = String(transaction.amount)
+      if !transaction.debit {
+         for b in budgetModel.savedEntities {
+            if transaction.budget == b.name {
+               oldTransaction.budget = b
+            }
+         }
+      }
+      oldTransaction.date = transaction.date ?? Date()
+      oldTransaction.debit = transaction.debit
+      oldTransaction.name = transaction.name
+      oldTransaction.notes = transaction.notes
    }
 }
 

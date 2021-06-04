@@ -36,27 +36,28 @@ class TransactionModel: ObservableObject {
    }
    
    // MARK: addTransaction
-   func addTransaction(name: String, date: Date, debit: Bool, account: String, amount: Double, budget: String, notes: String) {
-      let newTransaction = TransactionEntity(context: container.viewContext)
-      newTransaction.name = name
-      newTransaction.date = date
-      newTransaction.debit = debit
-      newTransaction.account = account
-      newTransaction.amount = amount
-      newTransaction.budget = budget
-      newTransaction.notes = notes
+   func addTransaction(newTransaction: NewTransaction) {
+      let addedTransaction = TransactionEntity(context: container.viewContext)
+      addedTransaction.account = newTransaction.account?.name
+      addedTransaction.amount = Double(newTransaction.amount.value) ?? 0.0
+      addedTransaction.budget = newTransaction.budget?.name
+      addedTransaction.date = newTransaction.date
+      addedTransaction.debit = newTransaction.debit
+      addedTransaction.name = newTransaction.name
+      addedTransaction.notes = newTransaction.notes
+      
       saveData()
    }
    
    // MARK: updateTransaction
-   func updateTransaction(transaction: TransactionEntity, name: String, date: Date, debit: Bool, account: String, amount: Double, budget: String, notes: String) {
-      transaction.name = name
-      transaction.date = date
-      transaction.debit = debit
-      transaction.account = account
-      transaction.amount = amount
-      transaction.budget = budget
-      transaction.notes = notes
+   func updateTransaction(transaction: TransactionEntity, newTransaction: NewTransaction) {
+      transaction.account = newTransaction.account?.name
+      transaction.amount = Double(newTransaction.amount.value) ?? 0.0
+      transaction.budget = newTransaction.budget?.name
+      transaction.date = newTransaction.date
+      transaction.debit = newTransaction.debit
+      transaction.name = newTransaction.name
+      transaction.notes = newTransaction.notes
       saveData()
    }
    

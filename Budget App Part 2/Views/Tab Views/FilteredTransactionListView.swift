@@ -30,6 +30,9 @@ struct FilteredTransactionListView: View {
                   Text("Filter")
                      .padding(.trailing, 5.0)
                })
+               .popover(isPresented: $showingTransactionPopover, content: {
+                  NewTransactionView()
+               })
             }
             .padding(.vertical, 7.0)
             .padding(.horizontal)
@@ -47,14 +50,10 @@ struct FilteredTransactionListView: View {
                })
             }
             .navigationTitle("Transactions")
-            .navigationBarItems(leading: EditButton()/*, trailing: addButton*/)
+            .navigationBarItems(leading: EditButton(), trailing: addButton)
             .environment(\.editMode, $editMode)
          }
-         
       }
-      .popover(isPresented: $showingTransactionPopover, content: {
-         NewTransactionView()
-      })
       .popover(isPresented: $showingFilterPopover, content: {
          TransactionFilterView(searchInput: $searchInput)
       })
@@ -115,8 +114,8 @@ struct FilteredTransactionListView: View {
       budgetModel.saveData()
    }
    func checkFilter(t: TransactionEntity) -> Bool {
-      // Account
       
+      // Account
       if searchInput.account != nil && t.account != searchInput.account?.name {
          return false
       }
@@ -158,7 +157,6 @@ struct FilteredTransactionListView: View {
          return true
       }
       return false
-      
    }
 }
 struct FilteredTransactionListView_Previews: PreviewProvider {
