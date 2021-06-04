@@ -37,8 +37,8 @@ struct TransactionListItemView: View {
    }
 }
 
-struct TransactionListItemView_Previews: PreviewProvider {
-   static var previews: some View {
-      TransactionListItemView(t: TransactionEntity())
-   }
-}
+//struct TransactionListItemView_Previews: PreviewProvider {
+//   static var previews: some View {
+//      TransactionListItemView(t: $TransactionEntity())
+//   }
+//}

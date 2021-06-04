@@ -22,7 +22,31 @@ struct AccountView: View {
                NavigationLink(
                   destination: AccountDetailView(account: a),
                   label: {
-                     AccountListItemView(a: a)
+                     HStack {
+                        VStack(alignment: .leading) {
+                           Text(a.name ?? "No Name")
+                           HStack {
+                              if a.debit {
+                                 Text("Debit Account")
+                              } else {
+                                 Text("Credit Account")
+                              }
+                           }
+                           .foregroundColor(.gray)
+                           .font(/*@START_MENU_TOKEN@*/.footnote/*@END_MENU_TOKEN@*/)
+                        }
+                        Spacer()
+                        if a.balance >= 0 {
+                           Text("$" + String(a.balance) )
+                              .foregroundColor(.green)
+                              .padding(.trailing)
+                        }
+                        else {
+                           Text("($" + String(abs(a.balance)) + ")")
+                              .foregroundColor(.red)
+                              .padding(.trailing)
+                        }
+                     }
                   })
             }
             .onDelete(perform: { indexSet in

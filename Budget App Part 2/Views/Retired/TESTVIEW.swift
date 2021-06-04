@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct FilteredTransactionListView: View {
+struct TESTVIEW: View {
    @EnvironmentObject var transactionModel:TransactionModel
    @EnvironmentObject var accountModel:AccountModel
    @EnvironmentObject var budgetModel:BudgetModel
@@ -21,49 +21,7 @@ struct FilteredTransactionListView: View {
    
    var body: some View {
       NavigationView {
-         VStack(spacing: 0.0) {
-            List {
-               
-               ForEach(transactionModel.savedEntities.filter{t in checkFilter(t: t)}) { t in
-                  HStack {
-                     NavigationLink(
-                        destination: TransactionDetailView(transaction: t),
-                        label: {
-                           HStack {
-                              VStack(alignment: .leading) {
-                                 Text(t.name ?? "no name")
-                                    .lineLimit(1)
-                                 Text(t.date?.addingTimeInterval(0) ?? Date(), style: .date)
-                                    .font(.footnote)
-                                    .foregroundColor(Color.gray)
-                              }
-                              Spacer()
-                              VStack(alignment: .trailing) {
-                                 if !t.debit {
-                                    Text("($\(String(t.amount)))")
-                                       .foregroundColor(Color.red)
-                                 } else {
-                                    Text(String(t.amount))
-                                       .foregroundColor(Color.green)
-                                 }
-                                 Text(t.account ?? "no account")
-                                    .font(.footnote)
-                                    .lineLimit(1)
-                              }
-                              .foregroundColor(Color.gray)
-                           }
-                        })
-                  }
-                  
-               }
-               .onDelete(perform: { indexSet in
-                  delete(indexSet: indexSet)
-               })
-            }
-            .navigationTitle("Transactions")
-            .navigationBarItems(leading: EditButton(), trailing: addButton)
-            .environment(\.editMode, $editMode)
-            
+         VStack {
             HStack() {
                SearchBarView(text: ($searchInput.text.bound), isSearching: $isSearching)
                Button(action: {
@@ -76,9 +34,27 @@ struct FilteredTransactionListView: View {
                   NewTransactionView(isPopover: true)
                })
             }
-            .padding(.vertical, 10)
-//            .padding(.bottom, 6)
+            .padding(.vertical, 7.0)
             .padding(.horizontal)
+            List {
+               
+               ForEach(transactionModel.savedEntities.filter{t in checkFilter(t: t)}) { t in
+                  HStack {
+                     NavigationLink(
+                        destination: TransactionDetailView(transaction: t),
+                        label: {
+                           TransactionListItemView(t: t)
+                        })
+                  }
+
+               }
+               .onDelete(perform: { indexSet in
+                  delete(indexSet: indexSet)
+               })
+            }
+            .navigationTitle("Transactions")
+            .navigationBarItems(leading: EditButton(), trailing: addButton)
+            .environment(\.editMode, $editMode)
          }
       }
       .popover(isPresented: $showingFilterPopover, content: {
@@ -186,9 +162,9 @@ struct FilteredTransactionListView: View {
       return false
    }
 }
-struct FilteredTransactionListView_Previews: PreviewProvider {
-   static var previews: some View {
-      FilteredTransactionListView()
-         .environmentObject(TransactionModel())
-   }
-}
+//struct FilteredTransactionListView_Previews: PreviewProvider {
+//   static var previews: some View {
+//      FilteredTransactionListView()
+//         .environmentObject(TransactionModel())
+//   }
+//}
