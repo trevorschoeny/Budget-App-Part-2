@@ -32,6 +32,7 @@
 		B1193855266AA5F9003C9005 /* EditAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1193854266AA5F9003C9005 /* EditAccountView.swift */; };
 		B1193857266AA659003C9005 /* NewAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1193856266AA659003C9005 /* NewAccount.swift */; };
 		B119385F266B4314003C9005 /* NewBudget.swift in Sources */ = {isa = PBXBuildFile; fileRef = B119385E266B4314003C9005 /* NewBudget.swift */; };
+		B1193861266BE01D003C9005 /* BudgetDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1193860266BE01D003C9005 /* BudgetDetailView.swift */; };
 		B15333B22664073C00C19617 /* BudgetAppContainer.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B15333B02664073C00C19617 /* BudgetAppContainer.xcdatamodeld */; };
 		B177869F2664594000A6A572 /* AccountModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B177869E2664594000A6A572 /* AccountModel.swift */; };
 		B17786A126646DD900A6A572 /* NewAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B17786A026646DD900A6A572 /* NewAccountView.swift */; };
@@ -70,6 +71,7 @@
 		B1193856266AA659003C9005 /* NewAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAccount.swift; sourceTree = "<group>"; };
 		B1193858266AD0A8003C9005 /* TESTVIEW.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TESTVIEW.swift; sourceTree = "<group>"; };
 		B119385E266B4314003C9005 /* NewBudget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewBudget.swift; sourceTree = "<group>"; };
+		B1193860266BE01D003C9005 /* BudgetDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetDetailView.swift; sourceTree = "<group>"; };
 		B15333B12664073C00C19617 /* BudgetAppContainer.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = BudgetAppContainer.xcdatamodel; sourceTree = "<group>"; };
 		B177869E2664594000A6A572 /* AccountModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountModel.swift; sourceTree = "<group>"; };
 		B17786A026646DD900A6A572 /* NewAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAccountView.swift; sourceTree = "<group>"; };
@@ -219,6 +221,7 @@
 			children = (
 				B106F1B52661533900FD3DD3 /* BudgetView.swift */,
 				B119381726686E0F003C9005 /* NewBudgetView.swift */,
+				B1193860266BE01D003C9005 /* BudgetDetailView.swift */,
 			);
 			path = "Budget Views";
 			sourceTree = "<group>";
@@ -293,6 +296,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B106F1B62661533900FD3DD3 /* BudgetView.swift in Sources */,
+				B1193861266BE01D003C9005 /* BudgetDetailView.swift in Sources */,
 				B11938212668BDE0003C9005 /* NumbersOnly.swift in Sources */,
 				B17786A126646DD900A6A572 /* NewAccountView.swift in Sources */,
 				B11938432669872E003C9005 /* DateExtension.swift in Sources */,

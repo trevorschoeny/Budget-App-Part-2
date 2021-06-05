@@ -18,36 +18,36 @@ struct BudgetView: View {
    var body: some View {
       NavigationView {
          List {
-            ForEach(budgetModel.savedEntities) { a in
-               NavigationLink(destination: DashboardView()) {
+            ForEach(budgetModel.savedEntities) { b in
+               NavigationLink(destination: BudgetDetailView(budget: b)) {
                   HStack(spacing: 0) {
-                     Text(a.name ?? "No Name")
+                     Text(b.name ?? "No Name")
                      Spacer()
-                     if a.balance < 0 {
-                        Text("($" + String(a.balance) + ")")
+                     if b.balance < 0 {
+                        Text("($" + String(b.balance) + ")")
                            .foregroundColor(.red)
                      }
-                     else if a.balance == 0 {
-                        Text("$" + String(abs(a.balance)))
+                     else if b.balance == 0 {
+                        Text("$" + String(abs(b.balance)))
                            .foregroundColor(.red)
                      }
-                     else if a.balance <= (a.budgetAmount * 0.25) {
-                        Text("$" + String(abs(a.balance)))
+                     else if b.balance <= (b.budgetAmount * 0.25) {
+                        Text("$" + String(abs(b.balance)))
                            .foregroundColor(.orange)
                      }
-                     else if a.balance <= (a.budgetAmount * 0.5) {
-                        Text("$" + String(abs(a.balance)))
+                     else if b.balance <= (b.budgetAmount * 0.5) {
+                        Text("$" + String(abs(b.balance)))
                            .foregroundColor(.yellow)
                      }
                      else {
-                        Text("$" + String(abs(a.balance)))
+                        Text("$" + String(abs(b.balance)))
                            .foregroundColor(.green)
                      }
                      Text(" left of ")
                         .foregroundColor(.gray)
                         .font(.footnote)
                         .offset(y: 2)
-                     Text("$" + String(a.budgetAmount))
+                     Text("$" + String(b.budgetAmount))
                   }
                }
             }
