@@ -18,13 +18,13 @@ struct EditAccountView: View {
    @Environment(\.presentationMode) var isPresented
    @State var showAlert = false
    
-    var body: some View {
+   var body: some View {
       NavigationView {
          VStack {
             
             Form {
                // MARK: Name
-               TextField("Add account name here...", text: $newAccount.name.bound)
+               TextField(oldAccount.name.bound, text: $newAccount.name.bound)
                
                // MARK: Credit or Debit
                VStack(alignment: .leading) {
@@ -38,16 +38,17 @@ struct EditAccountView: View {
                
                // MARK: Amount
                HStack {
+                  Text("Balance: ")
                   if !newAccount.debit {
                      Text("$( ")
-                     TextField("Starting Amount", text: $newAccount.balance.value)
+                     TextField(oldAccount.balance.value, text: $newAccount.balance.value)
                         .keyboardType(.decimalPad)
                      Spacer()
                      Text(" )")
                   }
                   else {
                      Text("$ ")
-                     TextField("Starting Amount", text: $newAccount.balance.value)
+                     TextField(oldAccount.balance.value, text: $newAccount.balance.value)
                         .keyboardType(.decimalPad)
                   }
                }
@@ -62,6 +63,9 @@ struct EditAccountView: View {
             
             // MARK: Cancel Button
             Button(action: {
+               newAccount.reset()
+               newAccount.debit = oldAccount.debit
+               newAccount.notes = oldAccount.notes
                self.isPresented.wrappedValue.dismiss()
             }, label: {
                Text("Cancel ")
@@ -71,15 +75,18 @@ struct EditAccountView: View {
             
             // MARK: Save Button
             Button(action: {
-               if newAccount.balance.value == ""  || newAccount.name == "" || newAccount.name == nil {
+               if newAccount.balance.value.filter({ $0 == "."}).count > 1 {
                   showAlert = true
                }
-               // Save Account
-               else {
-                  accountModel.updateAccount(account: inputAccount, newAccount: newAccount, oldAccount: oldAccount)
-                  updateNames()
-                  self.isPresented.wrappedValue.dismiss()
-               }
+               
+               // Update Account
+               accountModel.updateAccount(account: inputAccount, newAccount: newAccount, oldAccount: oldAccount)
+               updateNames()
+               oldAccount = newAccount
+               newAccount.reset()
+               newAccount.debit = oldAccount.debit
+               newAccount.notes = oldAccount.notes
+               self.isPresented.wrappedValue.dismiss()
                
             }, label: {
                ZStack {
@@ -101,11 +108,14 @@ struct EditAccountView: View {
          }
          .navigationTitle("Edit Account")
       }
-    }
+   }
    private func updateNames() {
-      for t in transactionModel.savedEntities {
-         if t.account == oldAccount.name {
-            t.account = newAccount.name
+      print(newAccount.name)
+      if newAccount.name != "" && newAccount.name != nil {
+         for t in transactionModel.savedEntities {
+            if t.account == oldAccount.name {
+               t.account = newAccount.name
+            }
          }
       }
    }

@@ -49,13 +49,21 @@ class TransactionModel: ObservableObject {
    }
    
    // MARK: updateTransaction
-   func updateTransaction(transaction: TransactionEntity, newTransaction: NewTransaction) {
+   func updateTransaction(transaction: TransactionEntity, newTransaction: NewTransaction, oldTransaction: NewTransaction) {
       transaction.account = newTransaction.account?.name
-      transaction.amount = Double(newTransaction.amount.value) ?? 0.0
+      if newTransaction.amount.value == "" {
+         transaction.amount = Double(oldTransaction.amount.value) ?? 0.0
+      } else {
+         transaction.amount = Double(newTransaction.amount.value) ?? 0.0
+      }
       transaction.budget = newTransaction.budget?.name
       transaction.date = newTransaction.date
       transaction.debit = newTransaction.debit
-      transaction.name = newTransaction.name
+      if newTransaction.name == "" || newTransaction.name == nil {
+         transaction.name = oldTransaction.name
+      } else {
+         transaction.name = newTransaction.name
+      }
       transaction.notes = newTransaction.notes
       saveData()
    }

@@ -59,9 +59,18 @@ struct NewTransactionView: View {
                
                // MARK: Amount
                HStack {
-                  Text("$ ")
-                  TextField("Amount", text: $newTransaction.amount.value)
-                     .keyboardType(.decimalPad)
+                  if !newTransaction.debit {
+                     Text("$( ")
+                     TextField("Amount", text: $newTransaction.amount.value)
+                        .keyboardType(.decimalPad)
+                     Spacer()
+                     Text(" )")
+                  }
+                  else {
+                     Text("$ ")
+                     TextField("Amount", text: $newTransaction.amount.value)
+                        .keyboardType(.decimalPad)
+                  }
                }
                
                // MARK: Budget

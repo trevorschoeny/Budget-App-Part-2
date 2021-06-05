@@ -52,12 +52,22 @@ class AccountModel: ObservableObject {
    
    // MARK: updateAccount
    func updateAccount(account: AccountEntity, newAccount: NewAccount, oldAccount: NewAccount) {
-      account.balance = Double(newAccount.balance.value) ?? 0.0
-      if oldAccount.debit != newAccount.debit {
-         account.balance *= -1
+      if newAccount.balance.value == "" {
+         account.balance = Double(oldAccount.balance.value) ?? 0.0
+      } else {
+         account.balance = Double(newAccount.balance.value) ?? 0.0
+      }
+      if newAccount.debit {
+         account.balance = abs(account.balance)
+      } else {
+         account.balance = abs(account.balance) * -1
       }
       account.debit = newAccount.debit
-      account.name = newAccount.name
+      if newAccount.name == "" || newAccount.name == nil {
+         account.name = oldAccount.name
+      } else {
+         account.name = newAccount.name
+      }
       account.notes = newAccount.notes
       account.userOrder = newAccount.userOrder
       saveData()

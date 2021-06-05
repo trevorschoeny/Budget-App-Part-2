@@ -15,7 +15,7 @@ struct NewAccount {
    var userOrder: Int16 = 1000
    
    mutating func reset() {
-      balance.value = ""
+      balance = NumbersOnly()
       debit = true
       name = nil
       notes = nil

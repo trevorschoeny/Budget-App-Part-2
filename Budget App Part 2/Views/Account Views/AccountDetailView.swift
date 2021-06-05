@@ -96,9 +96,7 @@ struct AccountDetailView: View {
       oldAccount.userOrder = account.userOrder
       
       // New Account
-      newAccount.balance.value = String(account.balance)
       newAccount.debit = account.debit
-      newAccount.name = account.name
       newAccount.notes = account.notes
       newAccount.userOrder = account.userOrder
    }

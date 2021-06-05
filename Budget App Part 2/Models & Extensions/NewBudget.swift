@@ -15,8 +15,8 @@ struct NewBudget {
    var userOrder: Int16 = 1000
    
    mutating func reset() {
-      balance.value = ""
-      budgetAmount.value = ""
+      balance = NumbersOnly()
+      budgetAmount = NumbersOnly()
       name = nil
       notes = nil
       userOrder = 1000

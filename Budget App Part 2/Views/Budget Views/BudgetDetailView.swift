@@ -87,7 +87,7 @@ struct BudgetDetailView: View {
       .navigationBarItems(trailing: editButton)
       .navigationBarTitleDisplayMode(.inline)
       .popover(isPresented: self.$showingPopover, content: {
-         //         EditAccountView(oldAccount: $oldAccount, newAccount: $newAccount, inputAccount: $account)
+         EditBudgetView(oldBudget: $oldBudget, newBudget: $newBudget, inputBudget: $budget)
       })
    }
    private var editButton: some View {
@@ -109,9 +109,6 @@ struct BudgetDetailView: View {
       oldBudget.userOrder = budget.userOrder
       
       // New Budget
-      newBudget.balance.value = String(budget.balance)
-      newBudget.budgetAmount.value = String(budget.budgetAmount)
-      newBudget.name = budget.name
       newBudget.notes = budget.notes
       newBudget.userOrder = budget.userOrder
    }

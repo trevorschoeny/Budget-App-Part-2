@@ -51,6 +51,29 @@ class BudgetModel: ObservableObject {
       saveData()
    }
    
+   // MARK: updateBudget
+   func updateBudget(budget: BudgetEntity, newBudget: NewBudget, oldBudget: NewBudget) {
+      if newBudget.balance.value == "" {
+         budget.balance = Double(oldBudget.balance.value) ?? 0.0
+      } else {
+         budget.balance = Double(newBudget.balance.value) ?? 0.0
+      }
+      if newBudget.budgetAmount.value == "" {
+         budget.budgetAmount = Double(oldBudget.budgetAmount.value) ?? 0.0
+      } else {
+         budget.budgetAmount = Double(newBudget.budgetAmount.value) ?? 0.0
+      }
+      budget.date = Date()
+      if newBudget.name == nil || newBudget.name == "" {
+         budget.name = oldBudget.name
+      } else {
+         budget.name = newBudget.name
+      }
+      budget.notes = newBudget.notes
+      budget.userOrder = newBudget.userOrder
+      saveData()
+   }
+   
    // MARK: deleteBudget
    func deleteBudget(indexSet: IndexSet) {
       guard let index = indexSet.first else { return }

@@ -26,7 +26,7 @@ struct EditTransactionView: View {
          VStack {
             Form {
                // MARK: Description
-               TextField("Add description here...", text: $newTransaction.name.bound)
+               TextField(oldTransaction.name.bound, text: $newTransaction.name.bound)
                
                // MARK: Date
                DatePicker("Date of Transaction: ", selection: $newTransaction.date, displayedComponents: .date)
@@ -61,9 +61,19 @@ struct EditTransactionView: View {
                
                // MARK: Amount
                HStack {
-                  Text("$ ")
-                  TextField("Amount", text: $newTransaction.amount.value)
-                     .keyboardType(.decimalPad)
+                  Text("Amount: ")
+                  if !newTransaction.debit {
+                     Text("$( ")
+                     TextField(oldTransaction.amount.value, text: $newTransaction.amount.value)
+                        .keyboardType(.decimalPad)
+                     Spacer()
+                     Text(" )")
+                  }
+                  else {
+                     Text("$ ")
+                     TextField(oldTransaction.amount.value, text: $newTransaction.amount.value)
+                        .keyboardType(.decimalPad)
+                  }
                }
                
                // MARK: Budget
@@ -105,6 +115,12 @@ struct EditTransactionView: View {
             
             // MARK: Cancel Button
             Button(action: {
+               newTransaction.reset()
+               newTransaction.account = oldTransaction.account
+               newTransaction.budget = oldTransaction.budget
+               newTransaction.date = oldTransaction.date
+               newTransaction.debit = oldTransaction.debit
+               newTransaction.notes = oldTransaction.notes
                self.isPresented.wrappedValue.dismiss()
             }, label: {
                Text("Cancel ")
@@ -116,16 +132,23 @@ struct EditTransactionView: View {
             Button(action: {
 
                // Show Alert
-               if newTransaction.name == "" || newTransaction.name == nil || newTransaction.amount.value == "" || newTransaction.amount.value.filter({ $0 == "."}).count > 1 || newTransaction.account == nil {
+               if newTransaction.amount.value.filter({ $0 == "."}).count > 1 || newTransaction.account == nil {
                   showAlert = true
                }
                // Submit Transaction
                else {
-                  model.updateTransaction(transaction: inputTransaction, newTransaction: newTransaction)
+                  model.updateTransaction(transaction: inputTransaction, newTransaction: newTransaction, oldTransaction: oldTransaction)
                   updateAccountBalance()
                   if !newTransaction.debit {
                      updateBudgetBalance()
                   }
+                  oldTransaction = newTransaction
+                  newTransaction.reset()
+                  newTransaction.account = oldTransaction.account
+                  newTransaction.budget = oldTransaction.budget
+                  newTransaction.date = oldTransaction.date
+                  newTransaction.debit = oldTransaction.debit
+                  newTransaction.notes = oldTransaction.notes
                }
                self.isPresented.wrappedValue.dismiss()
 
@@ -170,9 +193,17 @@ struct EditTransactionView: View {
       for i in accountModel.savedEntities {
          if newTransaction.account?.name == i.name {
             if !newTransaction.debit {
-               i.balance -= Double(newTransaction.amount.value) ?? 0.0
+               if newTransaction.amount.value == "" {
+                  i.balance -= Double(oldTransaction.amount.value) ?? 0.0
+               } else {
+                  i.balance -= Double(newTransaction.amount.value) ?? 0.0
+               }
             } else {
-               i.balance += Double(newTransaction.amount.value) ?? 0.0
+               if newTransaction.amount.value == "" {
+                  i.balance += Double(oldTransaction.amount.value) ?? 0.0
+               } else {
+                  i.balance += Double(newTransaction.amount.value) ?? 0.0
+               }
             }
             accountModel.saveData()
          }
@@ -187,7 +218,11 @@ struct EditTransactionView: View {
       }
       for i in budgetModel.savedEntities {
          if newTransaction.budget?.name == i.name {
-            i.balance -= Double(newTransaction.amount.value) ?? 0.0
+            if newTransaction.amount.value == "" {
+               i.balance -= Double(oldTransaction.amount.value) ?? 0.0
+            } else {
+               i.balance -= Double(newTransaction.amount.value) ?? 0.0
+            }
             budgetModel.saveData()
          }
       }

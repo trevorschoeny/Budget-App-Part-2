@@ -53,13 +53,11 @@ struct TransactionDetailView: View {
                      Text("to " + (transaction.account ?? "No Account"))
                         .font(.title2)
                         .fontWeight(.light)
-                     //                        .foregroundColor(Color.green)
                   }
                   else {
                      Text("from " + (transaction.account ?? "No Account"))
                         .font(.title2)
                         .fontWeight(.light)
-                     //                        .foregroundColor(Color.red)
                   }
                }
                .padding(.vertical)
@@ -141,7 +139,6 @@ struct TransactionDetailView: View {
             newTransaction.account = a
          }
       }
-      newTransaction.amount.value = String(transaction.amount)
       if !transaction.debit {
          for b in budgetModel.savedEntities {
             if transaction.budget == b.name {
@@ -151,7 +148,6 @@ struct TransactionDetailView: View {
       }
       newTransaction.date = transaction.date ?? Date()
       newTransaction.debit = transaction.debit
-      newTransaction.name = transaction.name
       newTransaction.notes = transaction.notes
    }
 }
