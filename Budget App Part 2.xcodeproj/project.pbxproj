@@ -31,6 +31,7 @@
 		B1193851266A9475003C9005 /* AccountDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1193850266A9475003C9005 /* AccountDetailView.swift */; };
 		B1193855266AA5F9003C9005 /* EditAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1193854266AA5F9003C9005 /* EditAccountView.swift */; };
 		B1193857266AA659003C9005 /* NewAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1193856266AA659003C9005 /* NewAccount.swift */; };
+		B119385F266B4314003C9005 /* NewBudget.swift in Sources */ = {isa = PBXBuildFile; fileRef = B119385E266B4314003C9005 /* NewBudget.swift */; };
 		B15333B22664073C00C19617 /* BudgetAppContainer.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B15333B02664073C00C19617 /* BudgetAppContainer.xcdatamodeld */; };
 		B177869F2664594000A6A572 /* AccountModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B177869E2664594000A6A572 /* AccountModel.swift */; };
 		B17786A126646DD900A6A572 /* NewAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B17786A026646DD900A6A572 /* NewAccountView.swift */; };
@@ -68,6 +69,7 @@
 		B1193854266AA5F9003C9005 /* EditAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAccountView.swift; sourceTree = "<group>"; };
 		B1193856266AA659003C9005 /* NewAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAccount.swift; sourceTree = "<group>"; };
 		B1193858266AD0A8003C9005 /* TESTVIEW.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TESTVIEW.swift; sourceTree = "<group>"; };
+		B119385E266B4314003C9005 /* NewBudget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewBudget.swift; sourceTree = "<group>"; };
 		B15333B12664073C00C19617 /* BudgetAppContainer.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = BudgetAppContainer.xcdatamodel; sourceTree = "<group>"; };
 		B177869E2664594000A6A572 /* AccountModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountModel.swift; sourceTree = "<group>"; };
 		B17786A026646DD900A6A572 /* NewAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAccountView.swift; sourceTree = "<group>"; };
@@ -152,6 +154,7 @@
 			children = (
 				B11938462669E101003C9005 /* NewTransaction.swift */,
 				B1193856266AA659003C9005 /* NewAccount.swift */,
+				B119385E266B4314003C9005 /* NewBudget.swift */,
 				B1193840266966D7003C9005 /* SearchParameters.swift */,
 				B11938202668BDE0003C9005 /* NumbersOnly.swift */,
 				B11938422669872E003C9005 /* DateExtension.swift */,
@@ -294,6 +297,7 @@
 				B17786A126646DD900A6A572 /* NewAccountView.swift in Sources */,
 				B11938432669872E003C9005 /* DateExtension.swift in Sources */,
 				B106F1BC26615B7700FD3DD3 /* TransactionDetailView.swift in Sources */,
+				B119385F266B4314003C9005 /* NewBudget.swift in Sources */,
 				B1193857266AA659003C9005 /* NewAccount.swift in Sources */,
 				B1193841266966D7003C9005 /* SearchParameters.swift in Sources */,
 				B1193855266AA5F9003C9005 /* EditAccountView.swift in Sources */,

@@ -52,7 +52,6 @@ struct AccountView: View {
             .onDelete(perform: { indexSet in
                self.selectedAccountIndexSet = indexSet
                 self.showAlert = true
-//                self.deleteIndexSet = indexSet
             })
             .onMove { (indexSet, index) in
                self.accountModel.savedEntities.move(fromOffsets: indexSet, toOffset: index)

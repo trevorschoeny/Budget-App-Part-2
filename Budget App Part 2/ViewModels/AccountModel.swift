@@ -26,7 +26,7 @@ class AccountModel: ObservableObject {
    func fetchAccounts() {
       // Create a fetch request
       let request = NSFetchRequest<AccountEntity>(entityName: "AccountEntity")
-      request.sortDescriptors = [NSSortDescriptor(key: "userOrder", ascending: true), NSSortDescriptor(key: "name", ascending: true)]
+      request.sortDescriptors = [NSSortDescriptor(key: "userOrder", ascending: true), NSSortDescriptor(key: "date", ascending: true)]
       do {
          // Try to fetch the fetch request and store the results in savedEntities
          savedEntities = try container.viewContext.fetch(request)
@@ -42,6 +42,7 @@ class AccountModel: ObservableObject {
       if !newAccount.debit && account.balance != 0 {
          account.balance *= -1
       }
+      account.date = Date()
       account.debit = newAccount.debit
       account.name = newAccount.name
       account.notes = newAccount.notes
@@ -58,6 +59,7 @@ class AccountModel: ObservableObject {
       account.debit = newAccount.debit
       account.name = newAccount.name
       account.notes = newAccount.notes
+      account.userOrder = newAccount.userOrder
       saveData()
    }
    

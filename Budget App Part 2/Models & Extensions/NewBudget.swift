@@ -1,22 +1,22 @@
 //
-//  NewAccount.swift
+//  NewBudget.swift
 //  Budget App Part 2
 //
-//  Created by Trevor Schoeny on 6/4/21.
+//  Created by Trevor Schoeny on 6/5/21.
 //
 
 import Foundation
 
-struct NewAccount {
+struct NewBudget {
    var balance = NumbersOnly()
-   var debit = true
+   var budgetAmount = NumbersOnly()
    var name: String?
    var notes: String?
    var userOrder: Int16 = 1000
    
    mutating func reset() {
       balance.value = ""
-      debit = true
+      budgetAmount.value = ""
       name = nil
       notes = nil
       userOrder = 1000

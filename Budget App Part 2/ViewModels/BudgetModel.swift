@@ -26,7 +26,7 @@ class BudgetModel: ObservableObject {
    func fetchBudgets() {
       // Create a fetch request
       let request = NSFetchRequest<BudgetEntity>(entityName: "BudgetEntity")
-      request.sortDescriptors = [NSSortDescriptor(key: "userOrder", ascending: true), NSSortDescriptor(key: "name", ascending: true)]
+      request.sortDescriptors = [NSSortDescriptor(key: "userOrder", ascending: true), NSSortDescriptor(key: "date", ascending: true)]
       do {
          // Try to fetch the fetch request and store the results in savedEntities
          savedEntities = try container.viewContext.fetch(request)
@@ -36,11 +36,18 @@ class BudgetModel: ObservableObject {
    }
    
    // MARK: addBudget
-   func addBudget(name: String, budgetAmount: Double) {
-      let newBudget = BudgetEntity(context: container.viewContext)
-      newBudget.name = name
-      newBudget.budgetAmount = budgetAmount
-      newBudget.balance = budgetAmount
+   func addBudget(newBudget: NewBudget, diffStartBalance: Bool) {
+      let budget = BudgetEntity(context: container.viewContext)
+      if diffStartBalance {
+         budget.balance = Double(newBudget.balance.value) ?? 0.0
+      } else {
+         budget.balance = Double(newBudget.budgetAmount.value) ?? 0.0
+      }
+      budget.budgetAmount = Double(newBudget.budgetAmount.value) ?? 0.0
+      budget.date = Date()
+      budget.name = newBudget.name
+      budget.notes = newBudget.notes
+      budget.userOrder = newBudget.userOrder
       saveData()
    }
    

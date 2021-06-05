@@ -10,11 +10,11 @@ import SwiftUI
 struct NewBudgetView: View {
    
    @EnvironmentObject var budgetModel: BudgetModel
+   @State var newBudget = NewBudget()
    
    @Environment(\.presentationMode) var isPresented
-   @State var selectedName = ""
    @State var showAlert = false
-   @State var selectedAmount = NumbersOnly()
+   @State var diffStartBalance = false
    
    var body: some View {
       NavigationView {
@@ -22,20 +22,38 @@ struct NewBudgetView: View {
             
             Form {
                // MARK: Name
-               TextField("Add budget name here...", text: $selectedName)
+               TextField("Add budget name here...", text: $newBudget.name.bound)
                
+               // MARK: Budget Amount
                HStack {
                   Text("$ ")
-                  TextField("Budget Amount", text: $selectedAmount.value)
+                  TextField("Budget Amount", text: $newBudget.budgetAmount.value)
                      .keyboardType(.decimalPad)
-                     .foregroundColor(Color.gray)
+               }
+               
+               // MARK: Different Starting Balance?
+               Toggle("Custom Starting Balance?", isOn: $diffStartBalance)
+               
+               // MARK: Balance
+               if diffStartBalance {
+                  HStack {
+                     Text("$ ")
+                     TextField("Starting Balance", text: $newBudget.balance.value)
+                        .keyboardType(.decimalPad)
+                  }
+               }
+               
+               //MARK: Notes
+               VStack(alignment: .leading, spacing: 0.0) {
+                  Text("Notes: ")
+                     .padding(.top, 5.0)
+                  TextEditor(text: $newBudget.notes.bound)
                }
             }
             
             // MARK: Cancel Button
             Button(action: {
-               selectedName = ""
-               selectedAmount.value = ""
+               newBudget.reset()
                self.isPresented.wrappedValue.dismiss()
             }, label: {
                Text("Cancel ")
@@ -45,16 +63,13 @@ struct NewBudgetView: View {
             
             // MARK: Save Button
             Button(action: {
-               if selectedName == "" || selectedAmount.value.filter({ $0 == "."}).count > 1 {
-                  
+               if newBudget.name == "" || newBudget.name == nil ||  newBudget.budgetAmount.value.filter({ $0 == "."}).count > 1 {
                   showAlert = true
-                  
                }
                // Save Account
                else {
-                  budgetModel.addBudget(name: selectedName, budgetAmount: Double(selectedAmount.value) ?? 0.0)
-                  selectedName = ""
-                  selectedAmount.value = ""
+                  budgetModel.addBudget(newBudget: newBudget, diffStartBalance: diffStartBalance)
+                  newBudget.reset()
                   self.isPresented.wrappedValue.dismiss()
                }
                
