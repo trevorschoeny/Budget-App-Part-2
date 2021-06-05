@@ -13,7 +13,9 @@ struct BudgetDetailView: View {
    @State var budget: BudgetEntity
    @State var oldBudget = NewBudget()
    @State var newBudget = NewBudget()
+   
    @State var showingPopover = false
+   @State var showAlert = false
    
    var body: some View {
       VStack {
@@ -24,6 +26,14 @@ struct BudgetDetailView: View {
                Text(budget.name ?? "No Name")
                   .font(.largeTitle)
                   .multilineTextAlignment(.leading)
+               // MARK: Date
+               HStack(spacing: 0) {
+                  Text("Created on ")
+                     .foregroundColor(.gray)
+                  Text(budget.date!, style: .date)
+                     .foregroundColor(.gray)
+               }
+               .font(.footnote)
             }
             .padding(.vertical, 5.0)
             
@@ -62,12 +72,16 @@ struct BudgetDetailView: View {
                         .font(.body)
                         .offset(y: 1.3)
                      Text("$" + String(budget.budgetAmount))
+                        .foregroundColor(.gray)
                         .font(.title2)
                   }
                }
                .font(.largeTitle)
                .padding(.vertical)
                Spacer()
+            }
+            NavigationLink(destination: PeriodsView(budget: budget, periodArr: budget.periods ?? [Date()])) {
+               Text("Periods History")
             }
             
             // MARK: Notes
@@ -83,9 +97,35 @@ struct BudgetDetailView: View {
             }
          }
          .listStyle(InsetGroupedListStyle())
+         
+         // MARK: New Period
+         Button(action: {
+            showAlert = true
+         }, label: {
+            ZStack {
+               Rectangle()
+                  .font(.headline)
+                  .foregroundColor(Color(#colorLiteral(red: 0, green: 0.5603182912, blue: 0, alpha: 1)))
+                  .frame(height: 55)
+                  .cornerRadius(10)
+                  .padding(.horizontal)
+               Text("New Period")
+                  .font(.headline)
+                  .foregroundColor(.white)
+            }
+         })
+         .alert(isPresented: $showAlert, content: {
+            Alert(title: Text("Would you like to start a new period for " + budget.name! + "?"),
+                  primaryButton: .default(Text("Yes")) {
+                     budget.balance = budget.budgetAmount
+                     budget.periods?.append(Date())
+                     budgetModel.saveData()
+                  },
+                  secondaryButton: .cancel())
+         })
       }
       .navigationBarItems(trailing: editButton)
-      .navigationBarTitleDisplayMode(.inline)
+      .navigationTitle("Budget")
       .popover(isPresented: self.$showingPopover, content: {
          EditBudgetView(oldBudget: $oldBudget, newBudget: $newBudget, inputBudget: $budget)
       })
@@ -106,10 +146,12 @@ struct BudgetDetailView: View {
       oldBudget.budgetAmount.value = String(budget.budgetAmount)
       oldBudget.name = budget.name
       oldBudget.notes = budget.notes
+      oldBudget.periods = budget.periods
       oldBudget.userOrder = budget.userOrder
       
       // New Budget
       newBudget.notes = budget.notes
+      newBudget.periods = budget.periods
       newBudget.userOrder = budget.userOrder
    }
 }

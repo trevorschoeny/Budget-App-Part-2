@@ -12,6 +12,7 @@ struct NewBudget {
    var budgetAmount = NumbersOnly()
    var name: String?
    var notes: String?
+   var periods: [Date]?
    var userOrder: Int16 = 1000
    
    mutating func reset() {
@@ -19,6 +20,7 @@ struct NewBudget {
       budgetAmount = NumbersOnly()
       name = nil
       notes = nil
+      periods = nil
       userOrder = 1000
    }
 }

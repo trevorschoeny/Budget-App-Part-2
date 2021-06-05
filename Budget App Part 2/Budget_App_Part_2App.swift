@@ -13,6 +13,9 @@ struct Budget_App_Part_2App: App {
         WindowGroup {
             BudgetTabView()
                .onAppear(perform: UIApplication.shared.addTapGestureRecognizer)
+               .environmentObject(TransactionModel())
+               .environmentObject(AccountModel())
+               .environmentObject(BudgetModel())
         }
     }
 }

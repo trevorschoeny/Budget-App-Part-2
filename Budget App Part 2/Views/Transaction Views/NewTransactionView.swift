@@ -40,8 +40,10 @@ struct NewTransactionView: View {
                      }
                      // MARK: Account
                      Picker(selection: $newTransaction.account, label: Text("")) {
-                        ForEach(accountModel.savedEntities) { a in
-                           Text(a.name ?? "no name").tag(a as AccountEntity?)
+                        if accountModel.savedEntities.count > 0 {
+                           ForEach(accountModel.savedEntities) { a in
+                              Text(a.name ?? "no name").tag(a as AccountEntity?)
+                           }
                         }
                      }
                      .lineLimit(1)
@@ -197,10 +199,10 @@ struct NewTransactionView: View {
    }
 }
 
-struct NewTransactionView_Previews: PreviewProvider {
-    static var previews: some View {
-      NewTransactionView(isPopover: false)
-         .environmentObject(TransactionModel())
-         .environmentObject(AccountModel())
-    }
-}
+//struct NewTransactionView_Previews: PreviewProvider {
+//    static var previews: some View {
+//      NewTransactionView(isPopover: false)
+//         .environmentObject(TransactionModel())
+//         .environmentObject(AccountModel())
+//    }
+//}

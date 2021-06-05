@@ -74,6 +74,8 @@ struct EditBudgetView: View {
                   oldBudget = newBudget
                   newBudget.reset()
                   newBudget.notes = oldBudget.notes
+                  newBudget.periods = oldBudget.periods
+                  newBudget.userOrder = oldBudget.userOrder
                   self.isPresented.wrappedValue.dismiss()
                }
                

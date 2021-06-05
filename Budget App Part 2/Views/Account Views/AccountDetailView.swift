@@ -72,7 +72,7 @@ struct AccountDetailView: View {
          .listStyle(InsetGroupedListStyle())
       }
       .navigationBarItems(trailing: editButton)
-      .navigationBarTitleDisplayMode(.inline)
+      .navigationTitle("Account")
       .popover(isPresented: self.$showingPopover, content: {
          EditAccountView(oldAccount: $oldAccount, newAccount: $newAccount, inputAccount: $account)
       })

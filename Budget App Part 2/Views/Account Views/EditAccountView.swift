@@ -86,6 +86,7 @@ struct EditAccountView: View {
                newAccount.reset()
                newAccount.debit = oldAccount.debit
                newAccount.notes = oldAccount.notes
+               newAccount.userOrder = oldAccount.userOrder
                self.isPresented.wrappedValue.dismiss()
                
             }, label: {

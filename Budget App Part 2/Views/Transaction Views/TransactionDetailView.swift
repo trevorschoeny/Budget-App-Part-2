@@ -97,7 +97,7 @@ struct TransactionDetailView: View {
          .listStyle(InsetGroupedListStyle())
       }
       .navigationBarItems(trailing: editButton)
-      .navigationBarTitleDisplayMode(.inline)
+      .navigationTitle("Transaction")
       .popover(isPresented: self.$showingPopover, content: {
          EditTransactionView(oldTransaction: $oldTransaction, newTransaction: $newTransaction, inputTransaction: $transaction)
       })

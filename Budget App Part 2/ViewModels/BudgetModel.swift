@@ -47,6 +47,7 @@ class BudgetModel: ObservableObject {
       budget.date = Date()
       budget.name = newBudget.name
       budget.notes = newBudget.notes
+      budget.periods = [Date()]
       budget.userOrder = newBudget.userOrder
       saveData()
    }
@@ -63,13 +64,14 @@ class BudgetModel: ObservableObject {
       } else {
          budget.budgetAmount = Double(newBudget.budgetAmount.value) ?? 0.0
       }
-      budget.date = Date()
+      budget.date = newBudget.periods?[0]
       if newBudget.name == nil || newBudget.name == "" {
          budget.name = oldBudget.name
       } else {
          budget.name = newBudget.name
       }
       budget.notes = newBudget.notes
+      budget.periods = newBudget.periods
       budget.userOrder = newBudget.userOrder
       saveData()
    }

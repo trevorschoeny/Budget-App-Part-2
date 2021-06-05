@@ -41,13 +41,13 @@ struct BudgetTabView: View {
                   Text("Transactions")
                }
             }
-         NewTransactionView(isPopover: false)
-            .tabItem {
-               VStack {
-                  Image(systemName: "plus.circle.fill")
-//                  Text("Add Transaction")
-               }
-            }
+//         NewTransactionView(isPopover: false)
+//            .tabItem {
+//               VStack {
+//                  Image(systemName: "plus.circle.fill")
+////                  Text("Add Transaction")
+//               }
+//            }
          AccountView()
             .tabItem {
                VStack {
@@ -63,9 +63,6 @@ struct BudgetTabView: View {
                }
             }
       }
-      .environmentObject(TransactionModel())
-      .environmentObject(AccountModel())
-      .environmentObject(BudgetModel())
     }
 }
 
