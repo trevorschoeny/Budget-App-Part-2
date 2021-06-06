@@ -32,6 +32,7 @@ struct DashboardView: View {
                            .foregroundColor(.red)
                      }
                   }
+                  .font(.title2)
                   HStack(spacing: 0) {
                      Text("Total Assets: ")
                         .foregroundColor(.gray)
@@ -63,6 +64,7 @@ struct DashboardView: View {
                            .foregroundColor(.red)
                      }
                   }
+                  .font(.title2)
                   HStack(spacing: 0) {
                      Text("Current Assets: ")
                         .foregroundColor(.gray)

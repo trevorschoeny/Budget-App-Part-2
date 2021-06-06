@@ -14,16 +14,30 @@ struct NewPeriodView: View {
    @State var remainingTotal: Double = 0
    
    @Environment(\.presentationMode) var isPresented
-   
-   init() {
-      remainingTotal = extraFunds.fundNumArr.reduce(0, +)
-   }
+
    
    var body: some View {
       NavigationView {
          VStack {
             List {
-               Text("You have $" + String(extraFunds.total - remainingTotal) + " remaining funds. Allocate them elsewhere for the next period, or continue.")
+               VStack(alignment: .leading) {
+                  HStack(spacing: 0) {
+                     Text("You have ")
+                     if extraFunds.total - extraFunds.fundNumArr.reduce(0, +) >= 0 {
+                        Text("$" + String(extraFunds.total - extraFunds.fundNumArr.reduce(0, +)))
+                           .font(.title3)
+                           .foregroundColor(.green)
+                     } else {
+                        Text("$" + String(extraFunds.total - extraFunds.fundNumArr.reduce(0, +)))
+                           .font(.title3)
+                           .foregroundColor(.red)
+                     }
+                     Text(" remaining funds.")
+                  }
+                  Text("Allocate them for the next period, or continue.")
+                     .font(.footnote)
+                     .foregroundColor(.gray)
+               }
                ForEach (0..<budgetModel.savedEntities.count) { i in
                   HStack {
                      Text(budgetModel.savedEntities[i].name! + ": ")
@@ -31,16 +45,12 @@ struct NewPeriodView: View {
                      Text("$")
                      TextField("0.00", text: $extraFunds.fundArr[i])
                         .keyboardType(.decimalPad)
-                        .onTapGesture {
-                           let d: Double = Double(extraFunds.fundArr[0]) ?? 0.0
-                           extraFunds.fundNumArr[0] = d
+                        .onChange(of: extraFunds.fundArr[i]) { _ in
+                           extraFunds.fundNumArr[i] = Double(extraFunds.fundArr[i]) ?? 0.0
                         }
                      
                   }
                }
-//               .onChange(of: $extraFunds.fundArr) { _ in
-//                  let x = 0
-//               }
             }
             
             // MARK: Start New Period
