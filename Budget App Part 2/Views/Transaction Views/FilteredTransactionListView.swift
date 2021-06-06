@@ -25,36 +25,7 @@ struct FilteredTransactionListView: View {
             List {
                
                ForEach(transactionModel.savedEntities.filter{t in checkFilter(t: t)}) { t in
-                  HStack {
-                     NavigationLink(
-                        destination: TransactionDetailView(transaction: t),
-                        label: {
-                           HStack {
-                              VStack(alignment: .leading) {
-                                 Text(t.name ?? "no name")
-                                    .lineLimit(1)
-                                 Text(t.date?.addingTimeInterval(0) ?? Date(), style: .date)
-                                    .font(.footnote)
-                                    .foregroundColor(Color.gray)
-                              }
-                              Spacer()
-                              VStack(alignment: .trailing) {
-                                 if !t.debit {
-                                    Text("($\(String(t.amount)))")
-                                       .foregroundColor(Color.red)
-                                 } else {
-                                    Text(String(t.amount))
-                                       .foregroundColor(Color.green)
-                                 }
-                                 Text(t.account ?? "no account")
-                                    .font(.footnote)
-                                    .lineLimit(1)
-                              }
-                              .foregroundColor(Color.gray)
-                           }
-                        })
-                  }
-                  
+                  TransactionListItemView(t: t)
                }
                .onDelete(perform: { indexSet in
                   delete(indexSet: indexSet)
@@ -92,7 +63,7 @@ struct FilteredTransactionListView: View {
             Button(action: {
                showingTransactionPopover = true
             }, label: {
-               Image(systemName: "plus")
+               Image(systemName: "plus.circle")
             })
          )
       default:

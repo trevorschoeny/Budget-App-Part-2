@@ -47,6 +47,7 @@ class BudgetModel: ObservableObject {
       budget.date = Date()
       budget.name = newBudget.name
       budget.notes = newBudget.notes
+      budget.onDashboard = false
       budget.periods = [Date()]
       budget.userOrder = newBudget.userOrder
       saveData()
@@ -71,6 +72,7 @@ class BudgetModel: ObservableObject {
          budget.name = newBudget.name
       }
       budget.notes = newBudget.notes
+      budget.onDashboard = newBudget.onDashboard ?? false
       budget.periods = newBudget.periods
       budget.userOrder = newBudget.userOrder
       saveData()

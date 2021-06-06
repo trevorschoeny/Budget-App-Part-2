@@ -24,6 +24,7 @@ struct EditBudgetView: View {
          VStack {
             
             Form {
+               Toggle("Include on Dashboard", isOn: $newBudget.onDashboard)
                // MARK: Name
                TextField(oldBudget.name.bound, text: $newBudget.name.bound)
                
@@ -74,6 +75,7 @@ struct EditBudgetView: View {
                   oldBudget = newBudget
                   newBudget.reset()
                   newBudget.notes = oldBudget.notes
+                  newBudget.onDashboard = oldBudget.onDashboard
                   newBudget.periods = oldBudget.periods
                   newBudget.userOrder = oldBudget.userOrder
                   self.isPresented.wrappedValue.dismiss()

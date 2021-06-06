@@ -46,6 +46,7 @@ class AccountModel: ObservableObject {
       account.debit = newAccount.debit
       account.name = newAccount.name
       account.notes = newAccount.notes
+      account.onDashboard = newAccount.onDashboard
       account.userOrder = 1000
       saveData()
    }
@@ -69,6 +70,7 @@ class AccountModel: ObservableObject {
          account.name = newAccount.name
       }
       account.notes = newAccount.notes
+      account.onDashboard = newAccount.onDashboard ?? false
       account.userOrder = newAccount.userOrder
       saveData()
    }

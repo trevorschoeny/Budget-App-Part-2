@@ -20,35 +20,7 @@ struct AccountView: View {
       NavigationView {
          List {
             ForEach(accountModel.savedEntities) { a in
-               NavigationLink(
-                  destination: AccountDetailView(account: a),
-                  label: {
-                     HStack {
-                        VStack(alignment: .leading) {
-                           Text(a.name ?? "No Name")
-                           HStack {
-                              if a.debit {
-                                 Text("Debit Account")
-                              } else {
-                                 Text("Credit Account")
-                              }
-                           }
-                           .foregroundColor(.gray)
-                           .font(/*@START_MENU_TOKEN@*/.footnote/*@END_MENU_TOKEN@*/)
-                        }
-                        Spacer()
-                        if a.balance >= 0 {
-                           Text("$" + String(a.balance) )
-                              .foregroundColor(.green)
-                              .padding(.trailing)
-                        }
-                        else {
-                           Text("($" + String(abs(a.balance)) + ")")
-                              .foregroundColor(.red)
-                              .padding(.trailing)
-                        }
-                     }
-                  })
+               AccountListItemView(a: a)
             }
             .onDelete(perform: { indexSet in
                self.selectedAccountIndexSet = indexSet
@@ -93,7 +65,7 @@ struct AccountView: View {
                Button(action: {
                   showingPopover = true
                }, label: {
-                  Image(systemName: "plus")
+                  Image(systemName: "plus.circle")
                })
             )
            default:

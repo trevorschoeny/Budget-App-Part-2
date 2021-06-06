@@ -21,6 +21,7 @@ struct NewAccountView: View {
          VStack {
             
             Form {
+               Toggle("Include on Dashboard", isOn: $newAccount.onDashboard)
                // MARK: Name
                TextField("Add account name here...", text: $newAccount.name.bound)
                

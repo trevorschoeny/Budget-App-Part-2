@@ -23,6 +23,7 @@ struct EditAccountView: View {
          VStack {
             
             Form {
+               Toggle("Include on Dashboard", isOn: $newAccount.onDashboard)
                // MARK: Name
                TextField(oldAccount.name.bound, text: $newAccount.name.bound)
                
@@ -86,6 +87,7 @@ struct EditAccountView: View {
                newAccount.reset()
                newAccount.debit = oldAccount.debit
                newAccount.notes = oldAccount.notes
+               newAccount.onDashboard = oldAccount.onDashboard
                newAccount.userOrder = oldAccount.userOrder
                self.isPresented.wrappedValue.dismiss()
                
@@ -111,7 +113,6 @@ struct EditAccountView: View {
       }
    }
    private func updateNames() {
-      print(newAccount.name)
       if newAccount.name != "" && newAccount.name != nil {
          for t in transactionModel.savedEntities {
             if t.account == oldAccount.name {

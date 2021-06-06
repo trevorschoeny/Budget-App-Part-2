@@ -22,37 +22,7 @@ struct BudgetView: View {
          VStack {
             List {
                ForEach(budgetModel.savedEntities) { b in
-                  NavigationLink(destination: BudgetDetailView(budget: b)) {
-                     HStack(spacing: 0) {
-                        Text(b.name ?? "No Name")
-                        Spacer()
-                        if b.balance < 0 {
-                           Text("($" + String(b.balance) + ")")
-                              .foregroundColor(.red)
-                        }
-                        else if b.balance == 0 {
-                           Text("$" + String(abs(b.balance)))
-                              .foregroundColor(.red)
-                        }
-                        else if b.balance <= (b.budgetAmount * 0.25) {
-                           Text("$" + String(abs(b.balance)))
-                              .foregroundColor(.orange)
-                        }
-                        else if b.balance <= (b.budgetAmount * 0.5) {
-                           Text("$" + String(abs(b.balance)))
-                              .foregroundColor(.yellow)
-                        }
-                        else {
-                           Text("$" + String(abs(b.balance)))
-                              .foregroundColor(.green)
-                        }
-                        Text(" left of ")
-                           .foregroundColor(.gray)
-                           .font(.footnote)
-                           .offset(y: 2)
-                        Text("$" + String(b.budgetAmount))
-                     }
-                  }
+                  BudgetListItemView(b: b)
                }
                .onDelete(perform: { indexSet in
                   self.selectedBudgetIndexSet = indexSet
@@ -128,7 +98,7 @@ struct BudgetView: View {
                Button(action: {
                   showingPopover = true
                }, label: {
-                  Image(systemName: "plus")
+                  Image(systemName: "plus.circle")
                })
             )
            default:

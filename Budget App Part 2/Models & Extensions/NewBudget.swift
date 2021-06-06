@@ -12,6 +12,7 @@ struct NewBudget {
    var budgetAmount = NumbersOnly()
    var name: String?
    var notes: String?
+   var onDashboard = false
    var periods: [Date]?
    var userOrder: Int16 = 1000
    
@@ -20,6 +21,7 @@ struct NewBudget {
       budgetAmount = NumbersOnly()
       name = nil
       notes = nil
+      onDashboard = false
       periods = nil
       userOrder = 1000
    }

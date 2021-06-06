@@ -146,11 +146,13 @@ struct BudgetDetailView: View {
       oldBudget.budgetAmount.value = String(budget.budgetAmount)
       oldBudget.name = budget.name
       oldBudget.notes = budget.notes
+      oldBudget.onDashboard = budget.onDashboard
       oldBudget.periods = budget.periods
       oldBudget.userOrder = budget.userOrder
       
       // New Budget
       newBudget.notes = budget.notes
+      newBudget.onDashboard = budget.onDashboard
       newBudget.periods = budget.periods
       newBudget.userOrder = budget.userOrder
    }

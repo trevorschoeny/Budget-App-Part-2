@@ -21,6 +21,7 @@ struct NewBudgetView: View {
          VStack {
             
             Form {
+               Toggle("Include on Dashboard", isOn: $newBudget.onDashboard)
                // MARK: Name
                TextField("Add budget name here...", text: $newBudget.name.bound)
                

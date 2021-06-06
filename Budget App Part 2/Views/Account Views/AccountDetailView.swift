@@ -101,11 +101,13 @@ struct AccountDetailView: View {
       oldAccount.debit = account.debit
       oldAccount.name = account.name
       oldAccount.notes = account.notes
+      oldAccount.onDashboard = account.onDashboard
       oldAccount.userOrder = account.userOrder
       
       // New Account
       newAccount.debit = account.debit
       newAccount.notes = account.notes
+      newAccount.onDashboard = account.onDashboard
       newAccount.userOrder = account.userOrder
    }
 }

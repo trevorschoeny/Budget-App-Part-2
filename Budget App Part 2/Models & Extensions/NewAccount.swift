@@ -12,6 +12,7 @@ struct NewAccount {
    var debit = true
    var name: String?
    var notes: String?
+   var onDashboard = false
    var userOrder: Int16 = 1000
    
    mutating func reset() {
@@ -19,6 +20,8 @@ struct NewAccount {
       debit = true
       name = nil
       notes = nil
+      onDashboard = false
       userOrder = 1000
+      
    }
 }
