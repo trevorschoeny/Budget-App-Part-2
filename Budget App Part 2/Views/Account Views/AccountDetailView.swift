@@ -33,6 +33,14 @@ struct AccountDetailView: View {
                      .font(.callout)
                      .foregroundColor(Color.gray)
                }
+               // MARK: Date
+               HStack(spacing: 0) {
+                  Text("Created on ")
+                     .foregroundColor(.gray)
+                  Text(account.date!, style: .date)
+                     .foregroundColor(.gray)
+               }
+               .font(.footnote)
             }
             .padding(.vertical, 5.0)
             

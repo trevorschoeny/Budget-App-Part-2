@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct BudgetView: View {
+   @EnvironmentObject var transactionModel:TransactionModel
    @EnvironmentObject var budgetModel:BudgetModel
    @State private var editMode = EditMode.inactive
    @State private var showingPopover = false
@@ -106,6 +107,12 @@ struct BudgetView: View {
                message: Text("Once deleted, this account is not recoverable."),
                primaryButton: .destructive(Text("Delete")) {
                   if budgetModel.savedEntities.count > 0 {
+                     for t in transactionModel.savedEntities {
+                        if t.budget == budgetModel.savedEntities[selectedBudgetIndexSet?.first ?? 0].name {
+                           t.budget! += " (Retired)"
+                        }
+                     }
+                     transactionModel.saveData()
                      self.budgetModel.deleteBudget(indexSet: selectedBudgetIndexSet ?? IndexSet())
                   }
                },

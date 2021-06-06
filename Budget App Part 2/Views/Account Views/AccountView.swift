@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct AccountView: View {
+   @EnvironmentObject var transactionModel:TransactionModel
    @EnvironmentObject var accountModel:AccountModel
    @State private var editMode = EditMode.inactive
    @State private var showingPopover = false
@@ -72,6 +73,12 @@ struct AccountView: View {
          Alert(title: Text("Are you sure?"),
                message: Text("Once deleted, this account is not recoverable."),
                primaryButton: .destructive(Text("Delete")) {
+                  for t in transactionModel.savedEntities {
+                     if t.account == accountModel.savedEntities[(selectedAccountIndexSet?.first)!].name {
+                        t.account! += " (Retired)"
+                     }
+                  }
+                  transactionModel.saveData()
                   self.accountModel.deleteAccount(indexSet: selectedAccountIndexSet ?? IndexSet())
                },
                secondaryButton: .cancel())
