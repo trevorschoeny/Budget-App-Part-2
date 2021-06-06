@@ -19,7 +19,9 @@ struct DashboardView: View {
       NavigationView {
          VStack {
             List {
-               VStack(alignment: .leading, spacing: 3) {
+               HStack {
+                  Spacer()
+               VStack(alignment: .center, spacing: 3) {
                   HStack(spacing: 0) {
                      Text("Total Balance: ")
                      if Balances().totalBalance >= 0 {
@@ -45,8 +47,12 @@ struct DashboardView: View {
                   }
                   .font(.footnote)
                }
+                  Spacer()
+               }
                .padding(.vertical, 5)
-               VStack(alignment: .leading, spacing: 3) {
+               HStack {
+                  Spacer()
+               VStack(alignment: .center, spacing: 3) {
                   HStack(spacing: 0) {
                      Text("Current Balance: ")
                      if Balances().currentBalance >= 0 {
@@ -72,6 +78,8 @@ struct DashboardView: View {
                   }
                   .font(.footnote)
                }
+                  Spacer()
+               }
                .padding(.vertical, 5)
                Section(header: Text("Accounts")) {
                   ForEach (accountModel.savedEntities.filter({ a in
@@ -84,7 +92,7 @@ struct DashboardView: View {
                   ForEach (budgetModel.savedEntities.filter({ b in
                      b.onDashboard
                   })) { b in
-                     Text(b.name ?? "")
+                     BudgetListItemView(b: b)
                   }
                }
             }
