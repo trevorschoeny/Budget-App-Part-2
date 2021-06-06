@@ -11,7 +11,8 @@ struct NewPeriodView: View {
    
    @EnvironmentObject var budgetModel:BudgetModel
    @State var extraFunds = ExtraFunds()
-   @State var remainingTotal: Double = 0
+   @State var inputBudget: BudgetEntity?
+   @State var inputFunds: Double = 0
    
    @Environment(\.presentationMode) var isPresented
 
@@ -23,14 +24,26 @@ struct NewPeriodView: View {
                VStack(alignment: .leading) {
                   HStack(spacing: 0) {
                      Text("You have ")
-                     if extraFunds.total - extraFunds.fundNumArr.reduce(0, +) >= 0 {
-                        Text("$" + String(extraFunds.total - extraFunds.fundNumArr.reduce(0, +)))
-                           .font(.title3)
-                           .foregroundColor(.green)
+                     if inputFunds == 0 {
+                        if extraFunds.total - extraFunds.fundNumArr.reduce(0, +) >= 0 {
+                           Text("$" + String(extraFunds.total - extraFunds.fundNumArr.reduce(0, +)))
+                              .font(.title3)
+                              .foregroundColor(.green)
+                        } else {
+                           Text("$" + String(extraFunds.total - extraFunds.fundNumArr.reduce(0, +)))
+                              .font(.title3)
+                              .foregroundColor(.red)
+                        }
                      } else {
-                        Text("$" + String(extraFunds.total - extraFunds.fundNumArr.reduce(0, +)))
-                           .font(.title3)
-                           .foregroundColor(.red)
+                        if inputFunds - extraFunds.fundNumArr.reduce(0, +) >= 0 {
+                           Text("$" + String(inputFunds - extraFunds.fundNumArr.reduce(0, +)))
+                              .font(.title3)
+                              .foregroundColor(.green)
+                        } else {
+                           Text("$" + String(inputFunds - extraFunds.fundNumArr.reduce(0, +)))
+                              .font(.title3)
+                              .foregroundColor(.red)
+                        }
                      }
                      Text(" remaining funds.")
                   }
@@ -56,10 +69,26 @@ struct NewPeriodView: View {
             // MARK: Start New Period
             VStack {
                Button(action: {
-                  for i in 0..<budgetModel.savedEntities.count {
-                     budgetModel.savedEntities[i].extraAmount = Double(extraFunds.fundArr[i]) ?? 0.0
-                     budgetModel.savedEntities[i].balance = budgetModel.savedEntities[i].budgetAmount + budgetModel.savedEntities[i].extraAmount
-                     budgetModel.savedEntities[i].periods?.append(Date())
+                  if inputFunds == 0 {
+                     for i in 0..<budgetModel.savedEntities.count {
+                        budgetModel.savedEntities[i].extraAmount = Double(extraFunds.fundArr[i]) ?? 0.0
+                        budgetModel.savedEntities[i].balance = budgetModel.savedEntities[i].budgetAmount + budgetModel.savedEntities[i].extraAmount
+                        budgetModel.saveData()
+                     }
+                  } else {
+                     for i in 0..<budgetModel.savedEntities.count {
+                        if budgetModel.savedEntities[i].name == inputBudget?.name {
+                           print("HERE 1")
+                           print(budgetModel.savedEntities[i].extraAmount)
+                           print(Double(extraFunds.fundArr[i]) ?? 0.0)
+                           budgetModel.savedEntities[i].extraAmount = Double(extraFunds.fundArr[i]) ?? 0.0
+                           budgetModel.savedEntities[i].balance = budgetModel.savedEntities[i].budgetAmount + budgetModel.savedEntities[i].extraAmount
+                        } else {
+                           print("HERE 2")
+                           budgetModel.savedEntities[i].extraAmount += Double(extraFunds.fundArr[i]) ?? 0.0
+                           budgetModel.savedEntities[i].balance += Double(extraFunds.fundArr[i]) ?? 0.0
+                        }
+                     }
                      budgetModel.saveData()
                   }
                   self.isPresented.wrappedValue.dismiss()

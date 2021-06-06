@@ -77,6 +77,7 @@ struct EditAccountView: View {
             // MARK: Cancel Button
             Button(action: {
                newAccount.reset()
+               newAccount.date = oldAccount.date 
                newAccount.debit = oldAccount.debit
                newAccount.isCurrent = oldAccount.isCurrent
                newAccount.notes = oldAccount.notes
@@ -100,6 +101,7 @@ struct EditAccountView: View {
                updateNames()
                oldAccount = newAccount
                newAccount.reset()
+               newAccount.date = oldAccount.date 
                newAccount.debit = oldAccount.debit
                newAccount.isCurrent = oldAccount.isCurrent
                newAccount.notes = oldAccount.notes

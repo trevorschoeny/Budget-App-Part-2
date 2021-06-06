@@ -96,6 +96,9 @@ struct DashboardView: View {
                   })) { b in
                      BudgetListItemView(b: b)
                   }
+                  .onDelete(perform: { indexSet in
+                     
+                  })
                }
             }
             .navigationTitle("Dashboard")

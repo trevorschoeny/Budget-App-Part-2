@@ -41,7 +41,6 @@
 		B1194325266C8B5B0066E39E /* BudgetBalanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1194324266C8B5B0066E39E /* BudgetBalanceView.swift */; };
 		B1194327266C959C0066E39E /* ExtraFunds.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1194326266C959C0066E39E /* ExtraFunds.swift */; };
 		B1194329266C97C30066E39E /* NewPeriodView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1194328266C97C30066E39E /* NewPeriodView.swift */; };
-		B1492495266C27C4007907C8 /* PeriodsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1492494266C27C4007907C8 /* PeriodsView.swift */; };
 		B15333B22664073C00C19617 /* BudgetAppContainer.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B15333B02664073C00C19617 /* BudgetAppContainer.xcdatamodeld */; };
 		B177869F2664594000A6A572 /* AccountModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B177869E2664594000A6A572 /* AccountModel.swift */; };
 		B17786A126646DD900A6A572 /* NewAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B17786A026646DD900A6A572 /* NewAccountView.swift */; };
@@ -204,6 +203,7 @@
 		B11938222668C005003C9005 /* Retired */ = {
 			isa = PBXGroup;
 			children = (
+				B1492494266C27C4007907C8 /* PeriodsView.swift */,
 				B119381A26688D15003C9005 /* TransactionListItemView.swift */,
 				B119384E266A8DA6003C9005 /* AccountListItemView.swift */,
 				B106F1B1266152F600FD3DD3 /* TransactionListView.swift */,
@@ -245,7 +245,6 @@
 				B119381726686E0F003C9005 /* NewBudgetView.swift */,
 				B1193860266BE01D003C9005 /* BudgetDetailView.swift */,
 				B1193862266BE50C003C9005 /* EditBudgetView.swift */,
-				B1492494266C27C4007907C8 /* PeriodsView.swift */,
 				B1194328266C97C30066E39E /* NewPeriodView.swift */,
 				B119431E266C6B560066E39E /* BudgetListItemView.swift */,
 				B1194324266C8B5B0066E39E /* BudgetBalanceView.swift */,
@@ -322,7 +321,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B1492495266C27C4007907C8 /* PeriodsView.swift in Sources */,
 				B106F1B62661533900FD3DD3 /* BudgetView.swift in Sources */,
 				B1194329266C97C30066E39E /* NewPeriodView.swift in Sources */,
 				B1193861266BE01D003C9005 /* BudgetDetailView.swift in Sources */,

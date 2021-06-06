@@ -71,6 +71,7 @@ struct EditBudgetView: View {
             // MARK: Cancel Button
             Button(action: {
                newBudget.reset()
+               newBudget.date = oldBudget.date 
                newBudget.notes = oldBudget.notes
                newBudget.onDashboard = oldBudget.onDashboard
                newBudget.periods = oldBudget.periods
@@ -93,6 +94,7 @@ struct EditBudgetView: View {
                   updateNames()
                   oldBudget = newBudget
                   newBudget.reset()
+                  newBudget.date = oldBudget.date 
                   newBudget.notes = oldBudget.notes
                   newBudget.onDashboard = oldBudget.onDashboard
                   newBudget.periods = oldBudget.periods

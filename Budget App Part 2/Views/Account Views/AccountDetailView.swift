@@ -112,6 +112,7 @@ struct AccountDetailView: View {
       
       // Old Account
       oldAccount.balance.value = String(account.balance)
+      oldAccount.date = account.date ?? Date()
       oldAccount.debit = account.debit
       oldAccount.isCurrent = account.isCurrent
       oldAccount.name = account.name
@@ -121,6 +122,7 @@ struct AccountDetailView: View {
       
       // New Account
       newAccount.debit = account.debit
+      newAccount.date = account.date ?? Date()
       newAccount.isCurrent = account.isCurrent
       newAccount.notes = account.notes
       newAccount.onDashboard = account.onDashboard
