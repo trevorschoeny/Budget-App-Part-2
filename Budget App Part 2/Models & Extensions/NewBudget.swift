@@ -10,6 +10,7 @@ import Foundation
 struct NewBudget {
    var balance = NumbersOnly()
    var budgetAmount = NumbersOnly()
+   var extraAmount = NumbersOnly()
    var name: String?
    var notes: String?
    var onDashboard = false
@@ -19,6 +20,7 @@ struct NewBudget {
    mutating func reset() {
       balance = NumbersOnly()
       budgetAmount = NumbersOnly()
+      extraAmount = NumbersOnly()
       name = nil
       notes = nil
       onDashboard = false

@@ -72,7 +72,7 @@ class AccountModel: ObservableObject {
          account.name = newAccount.name
       }
       account.notes = newAccount.notes
-      account.onDashboard = newAccount.onDashboard ?? false
+      account.onDashboard = newAccount.onDashboard 
       account.userOrder = newAccount.userOrder
       saveData()
    }

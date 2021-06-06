@@ -18,6 +18,7 @@ struct EditBudgetView: View {
    
    @Environment(\.presentationMode) var isPresented
    @State var showAlert = false
+   @State var isExtraFunds: Bool
    
    var body: some View {
       NavigationView {
@@ -47,6 +48,18 @@ struct EditBudgetView: View {
                      .keyboardType(.decimalPad)
                }
                
+               // MARK: Add Extra Funds?
+               Toggle("Add Extra Funds? (For this period only)", isOn: $isExtraFunds)
+               
+               // MARK: Extra Funds
+               if isExtraFunds {
+                  HStack {
+                     Text("Extra Funds: $ ")
+                     TextField(oldBudget.extraAmount.value, text: $newBudget.extraAmount.value)
+                        .keyboardType(.decimalPad)
+                  }
+               }
+               
                //MARK: Notes
                VStack(alignment: .leading, spacing: 0.0) {
                   Text("Notes: ")
@@ -59,6 +72,9 @@ struct EditBudgetView: View {
             Button(action: {
                newBudget.reset()
                newBudget.notes = oldBudget.notes
+               newBudget.onDashboard = oldBudget.onDashboard
+               newBudget.periods = oldBudget.periods
+               newBudget.userOrder = oldBudget.userOrder
                self.isPresented.wrappedValue.dismiss()
             }, label: {
                Text("Cancel ")
@@ -73,7 +89,7 @@ struct EditBudgetView: View {
                }
                // Update Budget
                else {
-                  budgetModel.updateBudget(budget: inputBudget, newBudget: newBudget, oldBudget: oldBudget)
+                  budgetModel.updateBudget(budget: inputBudget, newBudget: newBudget, oldBudget: oldBudget, isExtraFunds: isExtraFunds)
                   updateNames()
                   oldBudget = newBudget
                   newBudget.reset()

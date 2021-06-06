@@ -38,6 +38,9 @@
 		B119431F266C6B560066E39E /* BudgetListItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B119431E266C6B560066E39E /* BudgetListItemView.swift */; };
 		B1194321266C6BDF0066E39E /* TransactionListItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1194320266C6BDF0066E39E /* TransactionListItemView.swift */; };
 		B1194323266C7EFF0066E39E /* Balances.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1194322266C7EFF0066E39E /* Balances.swift */; };
+		B1194325266C8B5B0066E39E /* BudgetBalanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1194324266C8B5B0066E39E /* BudgetBalanceView.swift */; };
+		B1194327266C959C0066E39E /* ExtraFunds.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1194326266C959C0066E39E /* ExtraFunds.swift */; };
+		B1194329266C97C30066E39E /* NewPeriodView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1194328266C97C30066E39E /* NewPeriodView.swift */; };
 		B1492495266C27C4007907C8 /* PeriodsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1492494266C27C4007907C8 /* PeriodsView.swift */; };
 		B15333B22664073C00C19617 /* BudgetAppContainer.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B15333B02664073C00C19617 /* BudgetAppContainer.xcdatamodeld */; };
 		B177869F2664594000A6A572 /* AccountModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B177869E2664594000A6A572 /* AccountModel.swift */; };
@@ -83,6 +86,9 @@
 		B119431E266C6B560066E39E /* BudgetListItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetListItemView.swift; sourceTree = "<group>"; };
 		B1194320266C6BDF0066E39E /* TransactionListItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionListItemView.swift; sourceTree = "<group>"; };
 		B1194322266C7EFF0066E39E /* Balances.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Balances.swift; sourceTree = "<group>"; };
+		B1194324266C8B5B0066E39E /* BudgetBalanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetBalanceView.swift; sourceTree = "<group>"; };
+		B1194326266C959C0066E39E /* ExtraFunds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtraFunds.swift; sourceTree = "<group>"; };
+		B1194328266C97C30066E39E /* NewPeriodView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPeriodView.swift; sourceTree = "<group>"; };
 		B1492494266C27C4007907C8 /* PeriodsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeriodsView.swift; sourceTree = "<group>"; };
 		B15333B12664073C00C19617 /* BudgetAppContainer.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = BudgetAppContainer.xcdatamodel; sourceTree = "<group>"; };
 		B177869E2664594000A6A572 /* AccountModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountModel.swift; sourceTree = "<group>"; };
@@ -174,6 +180,7 @@
 				B11938422669872E003C9005 /* DateExtension.swift */,
 				B1193844266987EC003C9005 /* OptionalExtension.swift */,
 				B1194322266C7EFF0066E39E /* Balances.swift */,
+				B1194326266C959C0066E39E /* ExtraFunds.swift */,
 			);
 			path = "Models & Extensions";
 			sourceTree = "<group>";
@@ -239,7 +246,9 @@
 				B1193860266BE01D003C9005 /* BudgetDetailView.swift */,
 				B1193862266BE50C003C9005 /* EditBudgetView.swift */,
 				B1492494266C27C4007907C8 /* PeriodsView.swift */,
+				B1194328266C97C30066E39E /* NewPeriodView.swift */,
 				B119431E266C6B560066E39E /* BudgetListItemView.swift */,
+				B1194324266C8B5B0066E39E /* BudgetBalanceView.swift */,
 			);
 			path = "Budget Views";
 			sourceTree = "<group>";
@@ -315,12 +324,14 @@
 			files = (
 				B1492495266C27C4007907C8 /* PeriodsView.swift in Sources */,
 				B106F1B62661533900FD3DD3 /* BudgetView.swift in Sources */,
+				B1194329266C97C30066E39E /* NewPeriodView.swift in Sources */,
 				B1193861266BE01D003C9005 /* BudgetDetailView.swift in Sources */,
 				B11938212668BDE0003C9005 /* NumbersOnly.swift in Sources */,
 				B1194321266C6BDF0066E39E /* TransactionListItemView.swift in Sources */,
 				B17786A126646DD900A6A572 /* NewAccountView.swift in Sources */,
 				B11938432669872E003C9005 /* DateExtension.swift in Sources */,
 				B106F1BC26615B7700FD3DD3 /* TransactionDetailView.swift in Sources */,
+				B1194327266C959C0066E39E /* ExtraFunds.swift in Sources */,
 				B119385F266B4314003C9005 /* NewBudget.swift in Sources */,
 				B1193857266AA659003C9005 /* NewAccount.swift in Sources */,
 				B119431F266C6B560066E39E /* BudgetListItemView.swift in Sources */,
@@ -335,6 +346,7 @@
 				B1194323266C7EFF0066E39E /* Balances.swift in Sources */,
 				B1193824266931C8003C9005 /* TransactionFilterView.swift in Sources */,
 				B106F1B42661532B00FD3DD3 /* AccountView.swift in Sources */,
+				B1194325266C8B5B0066E39E /* BudgetBalanceView.swift in Sources */,
 				B119381F26689445003C9005 /* SearchBarView.swift in Sources */,
 				B119381D26688FD8003C9005 /* FilteredTransactionListView.swift in Sources */,
 				B119381426685FBB003C9005 /* NewTransactionView.swift in Sources */,

@@ -38,7 +38,7 @@ struct BudgetListItemView: View {
                .foregroundColor(.gray)
                .font(.footnote)
                .offset(y: 2)
-            Text("$" + String(b.budgetAmount))
+            Text("$" + String(b.budgetAmount + b.extraAmount))
          }
       }
     }

@@ -15,6 +15,7 @@ struct NewBudgetView: View {
    @Environment(\.presentationMode) var isPresented
    @State var showAlert = false
    @State var diffStartBalance = false
+   @State var isExtraFunds = false
    
    var body: some View {
       NavigationView {
@@ -46,6 +47,18 @@ struct NewBudgetView: View {
                   }
                }
                
+               // MARK: Add Extra Funds?
+               Toggle("Add Extra Funds? (For this period only)", isOn: $isExtraFunds)
+               
+               // MARK: Extra Funds
+               if isExtraFunds {
+                  HStack {
+                     Text("$ ")
+                     TextField("Extra Funds", text: $newBudget.extraAmount.value)
+                        .keyboardType(.decimalPad)
+                  }
+               }
+               
                //MARK: Notes
                VStack(alignment: .leading, spacing: 0.0) {
                   Text("Notes: ")
@@ -71,7 +84,7 @@ struct NewBudgetView: View {
                }
                // Save Account
                else {
-                  budgetModel.addBudget(newBudget: newBudget, diffStartBalance: diffStartBalance)
+                  budgetModel.addBudget(newBudget: newBudget, diffStartBalance: diffStartBalance, isExtraFunds: isExtraFunds)
                   newBudget.reset()
                   self.isPresented.wrappedValue.dismiss()
                }

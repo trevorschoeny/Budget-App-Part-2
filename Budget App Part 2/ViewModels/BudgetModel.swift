@@ -36,15 +36,19 @@ class BudgetModel: ObservableObject {
    }
    
    // MARK: addBudget
-   func addBudget(newBudget: NewBudget, diffStartBalance: Bool) {
+   func addBudget(newBudget: NewBudget, diffStartBalance: Bool, isExtraFunds: Bool) {
       let budget = BudgetEntity(context: container.viewContext)
       if diffStartBalance {
          budget.balance = Double(newBudget.balance.value) ?? 0.0
       } else {
          budget.balance = Double(newBudget.budgetAmount.value) ?? 0.0
       }
+      if isExtraFunds {
+         budget.balance += Double(newBudget.extraAmount.value) ?? 0.0
+      }
       budget.budgetAmount = Double(newBudget.budgetAmount.value) ?? 0.0
       budget.date = Date()
+      budget.extraAmount = Double(newBudget.extraAmount.value) ?? 0.0
       budget.name = newBudget.name
       budget.notes = newBudget.notes
       budget.onDashboard = false
@@ -54,7 +58,7 @@ class BudgetModel: ObservableObject {
    }
    
    // MARK: updateBudget
-   func updateBudget(budget: BudgetEntity, newBudget: NewBudget, oldBudget: NewBudget) {
+   func updateBudget(budget: BudgetEntity, newBudget: NewBudget, oldBudget: NewBudget, isExtraFunds: Bool) {
       if newBudget.balance.value == "" {
          budget.balance = Double(oldBudget.balance.value) ?? 0.0
       } else {
@@ -66,13 +70,18 @@ class BudgetModel: ObservableObject {
          budget.budgetAmount = Double(newBudget.budgetAmount.value) ?? 0.0
       }
       budget.date = newBudget.periods?[0]
+      if isExtraFunds && newBudget.extraAmount.value == "" {
+         budget.extraAmount = Double(oldBudget.extraAmount.value) ?? 0.0
+      } else {
+         budget.extraAmount = Double(newBudget.extraAmount.value) ?? 0.0
+      }
       if newBudget.name == nil || newBudget.name == "" {
          budget.name = oldBudget.name
       } else {
          budget.name = newBudget.name
       }
       budget.notes = newBudget.notes
-      budget.onDashboard = newBudget.onDashboard ?? false
+      budget.onDashboard = newBudget.onDashboard 
       budget.periods = newBudget.periods
       budget.userOrder = newBudget.userOrder
       saveData()

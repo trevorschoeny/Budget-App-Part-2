@@ -38,48 +38,8 @@ struct BudgetDetailView: View {
             .padding(.vertical, 5.0)
             
             // MARK: Balance & Budget Amount
-            HStack {
-               Spacer()
-               VStack {
-                  if budget.balance < 0 {
-                     Text("($" + String(budget.balance) + ")")
-                        .foregroundColor(.red)
-                        .fontWeight(.semibold)
-                  }
-                  else if budget.balance == 0 {
-                     Text("$" + String(abs(budget.balance)))
-                        .foregroundColor(.red)
-                        .fontWeight(.semibold)
-                  }
-                  else if budget.balance <= (budget.budgetAmount * 0.25) {
-                     Text("$" + String(abs(budget.balance)))
-                        .foregroundColor(.orange)
-                        .fontWeight(.semibold)
-                  }
-                  else if budget.balance <= (budget.budgetAmount * 0.5) {
-                     Text("$" + String(abs(budget.balance)))
-                        .foregroundColor(.yellow)
-                        .fontWeight(.semibold)
-                  }
-                  else {
-                     Text("$" + String(abs(budget.balance)))
-                        .foregroundColor(.green)
-                        .fontWeight(.semibold)
-                  }
-                  HStack(spacing: 0) {
-                     Text(" left of ")
-                        .foregroundColor(.gray)
-                        .font(.body)
-                        .offset(y: 1.3)
-                     Text("$" + String(budget.budgetAmount))
-                        .foregroundColor(.gray)
-                        .font(.title2)
-                  }
-               }
-               .font(.largeTitle)
-               .padding(.vertical)
-               Spacer()
-            }
+            BudgetBalanceView(budget: budget)
+            
             NavigationLink(destination: PeriodsView(budget: budget, periodArr: budget.periods ?? [Date()])) {
                Text("Periods History")
             }
@@ -114,6 +74,7 @@ struct BudgetDetailView: View {
                   .foregroundColor(.white)
             }
          })
+         .padding(.bottom, 10)
          .alert(isPresented: $showAlert, content: {
             Alert(title: Text("Would you like to start a new period for " + budget.name! + "?"),
                   primaryButton: .default(Text("Yes")) {
@@ -127,7 +88,7 @@ struct BudgetDetailView: View {
       .navigationBarItems(trailing: editButton)
       .navigationTitle("Budget")
       .popover(isPresented: self.$showingPopover, content: {
-         EditBudgetView(oldBudget: $oldBudget, newBudget: $newBudget, inputBudget: $budget)
+         EditBudgetView(oldBudget: $oldBudget, newBudget: $newBudget, inputBudget: $budget, isExtraFunds: !budget.extraAmount.isEqual(to: 0.0))
       })
    }
    private var editButton: some View {
@@ -144,6 +105,7 @@ struct BudgetDetailView: View {
       // Old Budget
       oldBudget.balance.value = String(budget.balance)
       oldBudget.budgetAmount.value = String(budget.budgetAmount)
+      oldBudget.extraAmount.value = String(budget.extraAmount)
       oldBudget.name = budget.name
       oldBudget.notes = budget.notes
       oldBudget.onDashboard = budget.onDashboard

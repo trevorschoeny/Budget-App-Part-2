@@ -10,11 +10,13 @@ import SwiftUI
 struct BudgetView: View {
    @EnvironmentObject var transactionModel:TransactionModel
    @EnvironmentObject var budgetModel:BudgetModel
-   @State private var editMode = EditMode.inactive
-   @State private var showingPopover = false
    
+   @State private var showingPopover = false
    @State private var showAlert = false
    @State private var showAlertPeriod = false
+   @State private var showPeriodPopover = false
+   
+   @State private var editMode = EditMode.inactive
    @State private var selectedBudgetIndexSet: IndexSet?
    
    var body: some View {
@@ -41,32 +43,33 @@ struct BudgetView: View {
             .environment(\.editMode, $editMode)
             
             // MARK: New Period
-            Button(action: {
-               showAlertPeriod = true
-            }, label: {
-               ZStack {
-                  Rectangle()
-                     .font(.headline)
-                     .foregroundColor(Color(#colorLiteral(red: 0, green: 0.5603182912, blue: 0, alpha: 1)))
-                     .frame(height: 55)
-                     .cornerRadius(10)
-                     .padding(.horizontal)
-                  Text("New Period")
-                     .font(.headline)
-                     .foregroundColor(.white)
-               }
-            })
-            .padding(.bottom, 10)
-            .alert(isPresented: $showAlertPeriod, content: {
-               Alert(title: Text("Would you like to start a new period?"),
-                     primaryButton: .default(Text("Yes")) {
-                        for b in budgetModel.savedEntities {
-                           b.balance = b.budgetAmount
-                           b.periods?.append(Date())
-                           budgetModel.saveData()
-                        }
-                     },
-                     secondaryButton: .cancel())
+            VStack {
+               Button(action: {
+                  showAlertPeriod = true
+               }, label: {
+                  ZStack {
+                     Rectangle()
+                        .font(.headline)
+                        .foregroundColor(Color(#colorLiteral(red: 0, green: 0.5603182912, blue: 0, alpha: 1)))
+                        .frame(height: 55)
+                        .cornerRadius(10)
+                        .padding(.horizontal)
+                     Text("New Period")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                  }
+               })
+               .padding(.bottom, 10)
+               .alert(isPresented: $showAlertPeriod, content: {
+                  Alert(title: Text("End this period and start a new one?"),
+                        primaryButton: .default(Text("Yes")) {
+                           showPeriodPopover = true
+                        },
+                        secondaryButton: .cancel())
+               })
+            }
+            .popover(isPresented: $showPeriodPopover, content: {
+               NewPeriodView()
             })
          }
       }
