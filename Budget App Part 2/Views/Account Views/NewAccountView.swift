@@ -21,9 +21,21 @@ struct NewAccountView: View {
          VStack {
             
             Form {
-               Toggle("Include on Dashboard", isOn: $newAccount.onDashboard)
                // MARK: Name
                TextField("Add account name here...", text: $newAccount.name.bound)
+               
+               // MARK: onDashboard
+               Toggle("Include on Dashboard", isOn: $newAccount.onDashboard)
+               
+               // MARK: isCurrent
+               VStack(alignment: .leading) {
+                  if !newAccount.isCurrent {
+                     Toggle("Long-term", isOn: $newAccount.isCurrent)
+                  }
+                  else {
+                     Toggle("Current", isOn: $newAccount.isCurrent)
+                  }
+               }
                
                // MARK: Credit or Debit
                VStack(alignment: .leading) {

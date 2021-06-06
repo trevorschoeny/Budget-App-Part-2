@@ -10,6 +10,7 @@ import Foundation
 struct NewAccount {
    var balance = NumbersOnly()
    var debit = true
+   var isCurrent = true
    var name: String?
    var notes: String?
    var onDashboard = false
@@ -18,6 +19,7 @@ struct NewAccount {
    mutating func reset() {
       balance = NumbersOnly()
       debit = true
+      isCurrent = true
       name = nil
       notes = nil
       onDashboard = false

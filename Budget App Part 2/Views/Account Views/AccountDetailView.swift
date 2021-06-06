@@ -25,13 +25,27 @@ struct AccountDetailView: View {
                   .font(.largeTitle)
                   .multilineTextAlignment(.leading)
                if account.debit {
-                  Text("Debit Account")
-                     .font(.callout)
-                     .foregroundColor(Color.gray)
+                  HStack(spacing: 0) {
+                     Text("Debit Account • ")
+                        .font(.callout)
+                        .foregroundColor(Color.gray)
+                     if account.isCurrent {
+                        Text("Current")
+                           .font(.callout)
+                           .foregroundColor(Color.gray)
+                     }
+                  }
                } else {
-                  Text("Credit Account")
-                     .font(.callout)
-                     .foregroundColor(Color.gray)
+                  HStack(spacing: 0) {
+                     Text("Credit Account • ")
+                        .font(.callout)
+                        .foregroundColor(Color.gray)
+                     if account.isCurrent {
+                        Text("Current")
+                           .font(.callout)
+                           .foregroundColor(Color.gray)
+                     }
+                  }
                }
                // MARK: Date
                HStack(spacing: 0) {
@@ -99,6 +113,7 @@ struct AccountDetailView: View {
       // Old Account
       oldAccount.balance.value = String(account.balance)
       oldAccount.debit = account.debit
+      oldAccount.isCurrent = account.isCurrent
       oldAccount.name = account.name
       oldAccount.notes = account.notes
       oldAccount.onDashboard = account.onDashboard
@@ -106,6 +121,7 @@ struct AccountDetailView: View {
       
       // New Account
       newAccount.debit = account.debit
+      newAccount.isCurrent = account.isCurrent
       newAccount.notes = account.notes
       newAccount.onDashboard = account.onDashboard
       newAccount.userOrder = account.userOrder

@@ -56,6 +56,7 @@ struct BudgetView: View {
                      .foregroundColor(.white)
                }
             })
+            .padding(.bottom, 10)
             .alert(isPresented: $showAlertPeriod, content: {
                Alert(title: Text("Would you like to start a new period?"),
                      primaryButton: .default(Text("Yes")) {

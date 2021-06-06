@@ -23,9 +23,21 @@ struct EditAccountView: View {
          VStack {
             
             Form {
-               Toggle("Include on Dashboard", isOn: $newAccount.onDashboard)
                // MARK: Name
                TextField(oldAccount.name.bound, text: $newAccount.name.bound)
+               
+               // MARK: onDashboard
+               Toggle("Include on Dashboard", isOn: $newAccount.onDashboard)
+               
+               // MARK: isCurrent
+               VStack(alignment: .leading) {
+                  if !newAccount.isCurrent {
+                     Toggle("Long-term", isOn: $newAccount.isCurrent)
+                  }
+                  else {
+                     Toggle("Current", isOn: $newAccount.isCurrent)
+                  }
+               }
                
                // MARK: Credit or Debit
                VStack(alignment: .leading) {
@@ -66,7 +78,10 @@ struct EditAccountView: View {
             Button(action: {
                newAccount.reset()
                newAccount.debit = oldAccount.debit
+               newAccount.isCurrent = oldAccount.isCurrent
                newAccount.notes = oldAccount.notes
+               newAccount.onDashboard = oldAccount.onDashboard
+               newAccount.userOrder = oldAccount.userOrder
                self.isPresented.wrappedValue.dismiss()
             }, label: {
                Text("Cancel ")
@@ -86,6 +101,7 @@ struct EditAccountView: View {
                oldAccount = newAccount
                newAccount.reset()
                newAccount.debit = oldAccount.debit
+               newAccount.isCurrent = oldAccount.isCurrent
                newAccount.notes = oldAccount.notes
                newAccount.onDashboard = oldAccount.onDashboard
                newAccount.userOrder = oldAccount.userOrder

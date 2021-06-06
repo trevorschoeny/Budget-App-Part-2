@@ -44,6 +44,7 @@ class AccountModel: ObservableObject {
       }
       account.date = Date()
       account.debit = newAccount.debit
+      account.isCurrent = newAccount.isCurrent
       account.name = newAccount.name
       account.notes = newAccount.notes
       account.onDashboard = newAccount.onDashboard
@@ -64,6 +65,7 @@ class AccountModel: ObservableObject {
          account.balance = abs(account.balance) * -1
       }
       account.debit = newAccount.debit
+      account.isCurrent = newAccount.isCurrent
       if newAccount.name == "" || newAccount.name == nil {
          account.name = oldAccount.name
       } else {

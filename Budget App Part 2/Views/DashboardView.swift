@@ -15,14 +15,64 @@ struct DashboardView: View {
 //   @State private var editMode = EditMode.inactive
    @State private var showingPopover = false
    
-   init() {
-      
-   }
-   
    var body: some View {
       NavigationView {
          VStack {
             List {
+               VStack(alignment: .leading, spacing: 3) {
+                  HStack(spacing: 0) {
+                     Text("Total Balance: ")
+                     if Balances().totalBalance >= 0 {
+                        Text("$" + String(Balances().totalBalance))
+                           .foregroundColor(.green)
+                     } else {
+                        Text("($" + String(Balances().totalBalance) + ")")
+                           .foregroundColor(.red)
+                     }
+                  }
+                  HStack(spacing: 0) {
+                     Text("Total Assets: ")
+                        .foregroundColor(.gray)
+                     Text("$" + String(Balances().totalAssets))
+                        .foregroundColor(.green)
+                  }
+                  .font(.footnote)
+                  HStack(spacing: 0) {
+                     Text("Total Liabilities: ")
+                        .foregroundColor(.gray)
+                     Text("($" + String(Balances().totalLiabilities) + ")")
+                        .foregroundColor(.red)
+                  }
+                  .font(.footnote)
+               }
+               .padding(.vertical, 5)
+               VStack(alignment: .leading, spacing: 3) {
+                  HStack(spacing: 0) {
+                     Text("Current Balance: ")
+                     if Balances().currentBalance >= 0 {
+                        Text("$" + String(Balances().currentBalance))
+                           .foregroundColor(.green)
+                     } else {
+                        Text("($" + String(Balances().currentBalance) + ")")
+                           .foregroundColor(.red)
+                     }
+                  }
+                  HStack(spacing: 0) {
+                     Text("Current Assets: ")
+                        .foregroundColor(.gray)
+                     Text("$" + String(Balances().currentAssets))
+                        .foregroundColor(.green)
+                  }
+                  .font(.footnote)
+                  HStack(spacing: 0) {
+                     Text("Current Liabilities: ")
+                        .foregroundColor(.gray)
+                     Text("($" + String(Balances().currentLiabilities) + ")")
+                        .foregroundColor(.red)
+                  }
+                  .font(.footnote)
+               }
+               .padding(.vertical, 5)
                Section(header: Text("Accounts")) {
                   ForEach (accountModel.savedEntities.filter({ a in
                      a.onDashboard
@@ -38,7 +88,6 @@ struct DashboardView: View {
                   }
                }
             }
-            .listStyle(InsetGroupedListStyle())
             .navigationTitle("Dashboard")
 //            .navigationBarItems(leading: EditButton(), trailing: addButton)
 //            .environment(\.editMode, $editMode)
